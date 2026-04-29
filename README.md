@@ -317,6 +317,12 @@ Bemovil2.0/
 │   ├── .env                       # Variables VITE_*
 │   └── ...
 │
+├── feedback/                      # Templates para el sistema de proposals
+│   ├── FEEDBACK_TEMPLATE.md       # Plantilla para problemas con herramientas
+│   └── DISCOVERY_TEMPLATE.md      # Plantilla para descubrimientos del proyecto
+│
+├── proposals/                     # PRs mergeadas quedan acá como registro
+│
 └── bemovil2-proxy/                # Reverse proxy + Green-Blue deployments
     ├── CLAUDE.md                  # Convenciones del proxy
     ├── .env                       # Orchestrator, Axiom
