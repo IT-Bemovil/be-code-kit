@@ -3,7 +3,7 @@ set -uo pipefail
 
 # be-code-kit — Bemovil 2.0 Development Environment Installer
 # Usage:
-#   git clone https://github.com/thestark77/be-code-kit.git && cd be-code-kit && bash install.sh [TARGET_DIR]
+#   git clone https://github.com/IT-Bemovil/be-code-kit.git && cd be-code-kit && bash install.sh [TARGET_DIR]
 #
 # TARGET_DIR defaults to current working directory's parent + "Bemovil2.0"
 

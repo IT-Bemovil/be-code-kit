@@ -2,7 +2,7 @@
 
 # be-code-kit — Bemovil 2.0 Development Environment Installer (PowerShell)
 # Usage:
-#   git clone https://github.com/thestark77/be-code-kit.git; cd be-code-kit; .\install.ps1 [TARGET_DIR]
+#   git clone https://github.com/IT-Bemovil/be-code-kit.git; cd be-code-kit; .\install.ps1 [TARGET_DIR]
 #
 # TARGET_DIR defaults to current script directory's parent + "Bemovil2.0"
 

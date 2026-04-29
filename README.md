@@ -61,7 +61,7 @@ Existen dos versiones del kit:
 
 | Kit | Repo | Descripción |
 |-----|------|-------------|
-| **be-code-kit** | [thestark77/be-code-kit](https://github.com/thestark77/be-code-kit) | Versión completa con contexto Bemovil (esta) |
+| **be-code-kit** | [IT-Bemovil/be-code-kit](https://github.com/IT-Bemovil/be-code-kit) | Versión completa con contexto Bemovil (esta) |
 | **stark-kit** | [thestark77/stark-kit](https://github.com/thestark77/stark-kit) | Versión genérica — solo framework, sin contexto empresarial |
 
 > 💡 Si eres externo a Bemovil o quieres usar el framework en otro proyecto, usa **stark-kit**.
@@ -107,7 +107,7 @@ Los repos de Bemovil están en la organización **IT-Bemovil** en GitHub. Si no 
 ### Linux / macOS / WSL / Git Bash
 
 ```bash
-git clone https://github.com/thestark77/be-code-kit.git
+git clone https://github.com/IT-Bemovil/be-code-kit.git
 cd be-code-kit
 bash install.sh
 ```
@@ -115,7 +115,7 @@ bash install.sh
 ### Windows (PowerShell)
 
 ```powershell
-git clone https://github.com/thestark77/be-code-kit.git
+git clone https://github.com/IT-Bemovil/be-code-kit.git
 cd be-code-kit
 .\install.ps1
 ```
@@ -675,7 +675,7 @@ Para reportar problemas o mejoras sobre las herramientas de IA (skills, plugins,
 |-------------|-----------|
 | autoSDD, skills, orquestador | `thestark77/autosdd` |
 | E2E Forge, tests, Axiom | `thestark77/e2e-forge` |
-| Installer, templates, contexto | `thestark77/be-code-kit` |
+| Installer, templates, contexto | `IT-Bemovil/be-code-kit` |
 
 5. **El equipo revisa y vota** en la PR
 
@@ -698,7 +698,7 @@ Aquí está la magia del trabajo colectivo con IA. Cada desarrollador, en sus se
    - Qué archivo de contexto debería actualizarse
    - El prompt/texto propuesto como cambio
    - La evidencia de cómo se descubrió
-4. **Se crea una PR** en `thestark77/be-code-kit`
+4. **Se crea una PR** en `IT-Bemovil/be-code-kit`
 5. **El equipo revisa y vota** — si tiene sentido, se mergea
 6. **El conocimiento se integra** — toda IA de todo el equipo se beneficia
 
@@ -911,7 +911,7 @@ Este kit es de todo el equipo. Hay varias formas de contribuir:
 
 1. **Sistema de feedback** — Escribe "FEEDBACK DE USO" en tu sesión de Claude Code
 2. **PRs directos** — Si sabes exactamente qué cambiar, manda un PR al repo
-3. **Issues** — Reporta bugs o sugerencias en [github.com/thestark77/be-code-kit/issues](https://github.com/thestark77/be-code-kit/issues)
+3. **Issues** — Reporta bugs o sugerencias en [github.com/IT-Bemovil/be-code-kit/issues](https://github.com/IT-Bemovil/be-code-kit/issues)
 4. **Conversación** — Háblalo con el equipo, las mejores ideas salen de la discusión
 
 > Si algo no funciona, si algo te parece raro, si encuentras una mejor forma de hacer algo — **dilo**. Este kit mejora con el input de todos.

@@ -57,7 +57,7 @@ Example: `proposals/juandev-sirse-timeout-15s.md`
 |----------------------------|-------------|
 | autoSDD pipeline, skills, orchestrator behavior | `thestark77/autosdd` |
 | E2E Forge modes, Axiom queries, test patterns | `thestark77/e2e-forge` |
-| Project context (business_logic, guidelines), installer, templates, agents | `thestark77/be-code-kit` |
+| Project context (business_logic, guidelines), installer, templates, agents | `IT-Bemovil/be-code-kit` |
 
 ### 4. Create the PR
 
