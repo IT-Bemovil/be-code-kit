@@ -32,11 +32,64 @@ Each sub-project has its own CLAUDE.md with stack, commands, conventions, and de
 | `doc.md`, endpoint documentation | `e2e-forge` (Mode 4: DOCUMENT) | Endpoint documentation generation |
 | OLD routes (express-validator + middleware) | `migration-agent` | Migrate to NEW pattern (Zod + helpers). See `context/guidelines.md` Section 2 |
 
-## Team Knowledge Sharing
+## Team Knowledge Sharing — Proposals
 
-When the user says **"FEEDBACK DE USO"**, guide them through the `feedback/FEEDBACK_TEMPLATE.md` to report tool/workflow issues, then help them create a PR to the be-code-kit repo.
+When the user says **"FEEDBACK DE USO"** or **"DESCUBRIMIENTO"**, follow this exact workflow:
 
-When the user says **"DESCUBRIMIENTO"**, guide them through the `feedback/DISCOVERY_TEMPLATE.md` to document project knowledge discovered during the session (business logic, undocumented behaviors, gotchas, conventions). Help them create a PR to the be-code-kit repo proposing specific updates to context files (`business_logic.md`, `guidelines.md`, etc.). This is how the team builds collective intelligence.
+### 1. Guide the user
+
+- **FEEDBACK DE USO** → Read `feedback/FEEDBACK_TEMPLATE.md` and walk the user through each section (problem, context, expected vs actual, proposed solution, priority).
+- **DESCUBRIMIENTO** → Read `feedback/DISCOVERY_TEMPLATE.md` and walk the user through each section (what was discovered, which context file it affects, proposed change as a prompt, evidence, impact).
+
+### 2. Build the proposal file
+
+Create a single `.md` file with the filled-out template. The file name format is:
+
+```
+proposals/{github-username}-{short-slug}.md
+```
+
+Example: `proposals/juandev-sirse-timeout-15s.md`
+
+### 3. Determine the target repo
+
+| What changed / is affected | Target repo |
+|----------------------------|-------------|
+| autoSDD pipeline, skills, orchestrator behavior | `thestark77/autosdd` |
+| E2E Forge modes, Axiom queries, test patterns | `thestark77/e2e-forge` |
+| Project context (business_logic, guidelines), installer, templates, agents | `thestark77/be-code-kit` |
+
+### 4. Create the PR
+
+```bash
+# Clone target repo to a temp dir
+git clone https://github.com/{target-repo}.git /tmp/{repo-name}
+cd /tmp/{repo-name}
+
+# Create branch and add the proposal file
+git checkout -b proposal/{github-username}-{short-slug}
+cp {proposal-file} proposals/
+git add proposals/
+git commit -m "proposal: {short description}"
+git push -u origin proposal/{github-username}-{short-slug}
+
+# Create PR
+gh pr create --title "Proposal: {short description}" --body "$(cat <<'EOF'
+## Tipo
+- [ ] FEEDBACK DE USO — problema o mejora de herramientas
+- [ ] DESCUBRIMIENTO — conocimiento del proyecto
+
+## Resumen
+{1-2 sentences}
+
+Propuesto por @{github-username}
+EOF
+)"
+```
+
+### 5. Share the PR URL with the user
+
+The proposal file is the ONLY change in the PR. No code modifications. When the team merges the PR, the `.md` file gets added to the `proposals/` folder as a record.
 
 ## Agent Operational Freedom
 

@@ -586,21 +586,30 @@ Eres un asistente de transcripción de voz profesional. Tu única función es to
 
 El kit incluye **dos sistemas** para que todo el equipo contribuya al proyecto. Cada sesión individual con la IA genera conocimiento que debería ser patrimonio de todos.
 
+### Cómo funciona
+
+Ambos flujos funcionan igual: la IA te guía para crear un **archivo `.md`** con tu feedback o descubrimiento, y lo sube como PR al repo correspondiente. Ese archivo va a la carpeta `proposals/` con tu nombre de GitHub.
+
+**La PR contiene SOLO ese archivo** — no modifica código ni configuración. El equipo revisa, vota, y cuando se aprueba, queda como registro permanente y se aplica al proyecto.
+
 ### 1. Feedback de Herramientas — "FEEDBACK DE USO"
 
 Para reportar problemas o mejoras sobre las herramientas de IA (skills, plugins, configuración).
 
 **Flujo:**
 
-1. **Detectás un problema o mejora** — Algo no funciona bien o se te ocurre algo mejor
-2. **Escribí "FEEDBACK DE USO"** en tu sesión de Claude Code
-3. **La IA te guía** para documentar tu experiencia
-4. **Se crea un PR** en el repo de be-code-kit con:
-   - Descripción del problema desde tu perspectiva
-   - Solución propuesta como prompt listo para implementar
-   - Nivel de prioridad
-5. **El equipo vota** — Thumbs up, comentarios, discusión en el PR
-6. **Las mejoras más votadas se implementan** — El Tech Lead las integra al kit
+1. **Escribí "FEEDBACK DE USO"** en tu sesión de Claude Code
+2. **La IA te guía** por la plantilla (`feedback/FEEDBACK_TEMPLATE.md`)
+3. **Se genera un archivo** `proposals/{tu-github}-{descripcion-corta}.md`
+4. **Se crea una PR** en el repo que corresponda:
+
+| Afecta a... | PR va a... |
+|-------------|-----------|
+| autoSDD, skills, orquestador | `thestark77/autosdd` |
+| E2E Forge, tests, Axiom | `thestark77/e2e-forge` |
+| Installer, templates, contexto | `thestark77/be-code-kit` |
+
+5. **El equipo revisa y vota** en la PR
 
 ### 2. Descubrimientos del Proyecto — "DESCUBRIMIENTO"
 
@@ -614,17 +623,18 @@ Acá está la magia del trabajo colectivo con IA. Cada desarrollador, en sus ses
 
 **Flujo:**
 
-1. **Descubrís algo importante** — La IA te revela algo sobre el proyecto, o vos le das contexto que debería quedar documentado
-2. **Escribí "DESCUBRIMIENTO"** en tu sesión de Claude Code
-3. **La IA te guía** para estructurar el descubrimiento
-4. **Se crea un PR** en el repo de be-code-kit que propone:
-   - El archivo de contexto a actualizar (`business_logic.md`, `guidelines.md`, etc.)
-   - El texto exacto a agregar/modificar
+1. **Escribí "DESCUBRIMIENTO"** en tu sesión de Claude Code
+2. **La IA te guía** por la plantilla (`feedback/DISCOVERY_TEMPLATE.md`)
+3. **Se genera un archivo** `proposals/{tu-github}-{descripcion-corta}.md` que incluye:
+   - Qué se descubrió
+   - Qué archivo de contexto debería actualizarse
+   - El prompt/texto propuesto como cambio
    - La evidencia de cómo se descubrió
-5. **El equipo revisa y vota** — Si tiene sentido, se mergea
-6. **El contexto se actualiza** — A partir de ahí, TODA IA de TODO el equipo sabe esto
+4. **Se crea una PR** en `thestark77/be-code-kit`
+5. **El equipo revisa y vota** — si tiene sentido, se mergea
+6. **El conocimiento se integra** — toda IA de todo el equipo se beneficia
 
-> 💡 **Cada descubrimiento que compartís hace que la IA sea más inteligente para TODO el equipo.** Es como entrenar un cerebro colectivo.
+> **Cada descubrimiento que compartís hace que la IA sea más inteligente para TODO el equipo.** Es como entrenar un cerebro colectivo.
 
 ### Ejemplos de descubrimientos valiosos
 
@@ -636,14 +646,13 @@ Acá está la magia del trabajo colectivo con IA. Cada desarrollador, en sus ses
 | "El middleware de face detection solo aplica a montos > 500K COP" | `guidelines.md` |
 | "El cron de limpieza de sesiones corre cada 6 horas pero debería ser cada 1" | `Bemovil2questions.md` |
 
-### Templates
+### Templates y carpeta de proposals
 
-Los PRs de feedback y descubrimiento siguen plantillas estructuradas:
+- `feedback/FEEDBACK_TEMPLATE.md` — Plantilla para problemas con herramientas
+- `feedback/DISCOVERY_TEMPLATE.md` — Plantilla para descubrimientos
+- `proposals/` — Carpeta donde quedan los archivos mergeados como registro permanente
 
-- `feedback/FEEDBACK_TEMPLATE.md` — Para problemas con herramientas
-- `feedback/DISCOVERY_TEMPLATE.md` — Para descubrimientos sobre el proyecto
-
-> 💡 No necesitás saber cómo arreglarlo técnicamente — describí lo que encontraste y el equipo decide juntos cómo integrarlo.
+> No necesitás saber cómo arreglarlo técnicamente — describí lo que encontraste y el equipo decide juntos cómo integrarlo.
 
 ---
 
