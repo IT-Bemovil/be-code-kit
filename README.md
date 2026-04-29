@@ -9,7 +9,7 @@
 
 <p align="center">
   <strong>El entorno de desarrollo con IA del equipo Bemovil, listo para instalar en un solo comando.</strong><br/>
-  Creado por el Tech Lead para replicar su setup exacto de Claude Code en las máquinas de todo el equipo.
+  Creado para replicar el setup completo de Claude Code en las máquinas de todo el equipo.
 </p>
 
 <p align="center">
@@ -47,7 +47,7 @@
 
 ## 🎯 Qué es be-code-kit
 
-**be-code-kit** es un instalador automatizado que replica el entorno completo de desarrollo con IA del Tech Lead de Bemovil 2.0 en tu máquina. En un solo comando vas a tener:
+**be-code-kit** es un instalador automatizado que replica el entorno completo de desarrollo con IA de Bemovil 2.0 en tu máquina. En un solo comando vas a tener:
 
 - **autoSDD v5.3** — Framework de desarrollo autónomo que orquesta sub-agentes de IA
 - **E2E Forge** — Skill personalizada para tests E2E automatizados con logs reales de Axiom
@@ -64,13 +64,13 @@ Existen dos versiones del kit:
 | **be-code-kit** | [thestark77/be-code-kit](https://github.com/thestark77/be-code-kit) | Versión completa con contexto Bemovil (esta) |
 | **stark-kit** | [thestark77/stark-kit](https://github.com/thestark77/stark-kit) | Versión genérica — solo framework, sin contexto empresarial |
 
-> 💡 Si sos externo a Bemovil o querés usar el framework en otro proyecto, usá **stark-kit**.
+> 💡 Si eres externo a Bemovil o quieres usar el framework en otro proyecto, usa **stark-kit**.
 
 ---
 
 ## ✅ Requisitos previos
 
-Antes de ejecutar el instalador, necesitás tener estas herramientas instaladas. Si te falta alguna, hacé clic en el enlace para descargarla.
+Antes de ejecutar el instalador, necesitas tener estas herramientas instaladas. Si te falta alguna, haz clic en el enlace para descargarla.
 
 | # | Requisito | Verificación | Descarga |
 |---|-----------|-------------|----------|
@@ -78,12 +78,12 @@ Antes de ejecutar el instalador, necesitás tener estas herramientas instaladas.
 | 2 | **Git** | `git --version` | [git-scm.com/downloads](https://git-scm.com/downloads) |
 | 3 | **Claude Code CLI** | `claude --version` | `npm install -g @anthropic-ai/claude-code` |
 | 4 | **pnpm** (recomendado) | `pnpm --version` | `npm install -g pnpm` |
-| 5 | **Acceso a GitHub** | — | Necesitás acceso a la org [IT-Bemovil](https://github.com/IT-Bemovil) |
-| 6 | **Playwright** (opcional) | — | `npx playwright install` (después de la instalación) |
+| 5 | **Acceso a GitHub** | — | Necesitas acceso a la org [IT-Bemovil](https://github.com/IT-Bemovil) |
+| 6 | **Playwright** (opcional) | — | `npm install -g playwright && playwright install chromium` (después de la instalación) |
 
 ### Sobre Claude Code CLI
 
-Claude Code requiere un **plan Claude Pro ($20 USD/mes)**. La empresa cubre este costo — si no tenés acceso aún, pedíselo al Tech Lead.
+Claude Code requiere un **plan Claude Pro ($20 USD/mes)**. La empresa cubre este costo — si no tienes acceso aún, solicita las credenciales al equipo.
 
 ```bash
 # Instalar Claude Code CLI globalmente
@@ -98,7 +98,7 @@ claude
 
 ### Sobre el acceso a GitHub
 
-Los repos de Bemovil están en la organización **IT-Bemovil** en GitHub. Si no tenés acceso, el instalador va a saltar los repos que no pueda clonar (no se rompe), pero necesitás pedirle al Tech Lead que te agregue a la organización.
+Los repos de Bemovil están en la organización **IT-Bemovil** en GitHub. Si no tienes acceso, el instalador va a saltar los repos que no pueda clonar (no se rompe), pero necesitas solicitar que te agreguen a la organización.
 
 ---
 
@@ -122,13 +122,13 @@ cd be-code-kit
 
 ### Directorio de destino personalizado
 
-Por defecto el instalador crea la carpeta `Bemovil2.0/` en el mismo nivel donde clonaste `be-code-kit`. Podés especificar otro directorio:
+Por defecto el instalador crea la carpeta `Bemovil2.0/` en el mismo nivel donde clonaste `be-code-kit`. Puedes especificar otro directorio:
 
 ```bash
 bash install.sh /ruta/a/mi/directorio
 ```
 
-> ⚠️ Si el directorio ya existe y tiene archivos, el instalador te pregunta si querés **actualizar** — solo sobreescribe archivos de configuración (CLAUDE.md, context/, .claude/) sin tocar los repositorios existentes.
+> ⚠️ Si el directorio ya existe y tiene archivos, el instalador te pregunta si quieres **actualizar** — solo sobreescribe archivos de configuración (CLAUDE.md, context/, .claude/) sin tocar los repositorios existentes.
 
 ---
 
@@ -152,7 +152,7 @@ Si falta alguno, el instalador se detiene y te indica cómo instalarlo.
 
 - Valida si el directorio existe y si tiene contenido
 - Si está vacío, lo crea sin preguntar
-- Si ya tiene archivos, te pregunta si querés continuar en **modo actualización** (solo sobreescribe configs, no toca repos)
+- Si ya tiene archivos, te pregunta si quieres continuar en **modo actualización** (solo sobreescribe configs, no toca repos)
 </details>
 
 <details>
@@ -173,7 +173,7 @@ Copia desde `templates/` al directorio destino:
 <details>
 <summary><strong>Paso 3 — Crea plantillas de .env vacías</strong></summary>
 
-Crea archivos `.env` con comentarios explicativos pero sin valores sensibles en cada sub-proyecto. Más adelante vas a pegar los valores reales que te comparte el Tech Lead.
+Crea archivos `.env` con comentarios explicativos pero sin valores sensibles en cada sub-proyecto. Más adelante vas a pegar los valores reales que se comparten por canal interno.
 </details>
 
 <details>
@@ -194,7 +194,7 @@ Clona desde la org IT-Bemovil de GitHub:
 <details>
 <summary><strong>Paso 5 — Instala autoSDD v5.3</strong></summary>
 
-Descarga y ejecuta el instalador interactivo de autoSDD. Este paso abre un menú donde debés seleccionar al menos **"claude-code"** como agente destino.
+Descarga y ejecuta el instalador interactivo de autoSDD. Este paso abre un menú donde debes seleccionar al menos **"claude-code"** como agente destino.
 
 autoSDD instala automáticamente:
 - Skills compartidas (prompt-engineering, error-handling, etc.)
@@ -231,11 +231,11 @@ Inicializa un repo Git en la carpeta raíz (`Bemovil2.0/`) con los archivos de c
 
 ## 🚀 Post-instalación
 
-Después de que el instalador termine, necesitás completar estos pasos manualmente:
+Después de que el instalador termine, necesitas completar estos pasos manualmente:
 
 ### 1. Pegar variables de entorno (.env)
 
-El Tech Lead te comparte las variables de entorno por chat interno. Cada sub-proyecto tiene su propio `.env`:
+Las variables de entorno se comparten por canal interno. Cada sub-proyecto tiene su propio `.env`:
 
 ```bash
 # Pegar los valores en cada archivo .env
@@ -247,7 +247,7 @@ admin/.env          # Similar a frontend
 bemovil2-proxy/.env # Orchestrator, Axiom
 ```
 
-> ⚠️ **NUNCA** hagas commit de archivos `.env` — ya están en `.gitignore`. Si ves un `.env` staged, quitalo inmediatamente.
+> ⚠️ **NUNCA** hagas commit de archivos `.env` — ya están en `.gitignore`. Si ves un `.env` staged, quítalo inmediatamente.
 
 ### 2. Instalar dependencias de cada proyecto
 
@@ -260,12 +260,13 @@ cd ../bemovil2-proxy && pnpm install
 
 ### 3. Configurar Axiom (para E2E Forge)
 
-Pedile al Tech Lead el `AXIOM_QUERY_TOKEN` y pegalo en `backend/.env`. Sin esto, E2E Forge no puede extraer logs de producción.
+Solicita el `AXIOM_QUERY_TOKEN` al equipo y pégalo en `backend/.env`. Sin esto, E2E Forge no puede extraer logs de producción.
 
 ### 4. Instalar Playwright (para tests de browser)
 
 ```bash
-npx playwright install chromium
+npm install -g playwright
+playwright install chromium
 ```
 
 ### 5. Verificar la instalación
@@ -274,7 +275,7 @@ npx playwright install chromium
 cd Bemovil2.0
 claude
 # Debería arrancar Claude Code con autoSDD activo
-# Probá con: "¿qué skills tengo disponibles?"
+# Prueba con: "¿qué skills tengo disponibles?"
 ```
 
 ---
@@ -335,14 +336,14 @@ Bemovil2.0/
 
 ### Filosofía
 
-Cada sub-proyecto maneja sus propias variables de entorno en un archivo `.env` local. El instalador crea plantillas vacías con comentarios. Las credenciales reales las comparte el Tech Lead por canal privado.
+Cada sub-proyecto maneja sus propias variables de entorno en un archivo `.env` local. El instalador crea plantillas vacías con comentarios. Las credenciales reales se comparten por canal interno.
 
 ### Reglas de oro
 
 - ❌ **NUNCA** commitear archivos `.env`
 - ❌ **NUNCA** pegar credenciales de producción en tu máquina local
 - ✅ Siempre usar credenciales de **sandbox** para desarrollo
-- ✅ Si necesitás una variable nueva, pedísela al Tech Lead
+- ✅ Si necesitas una variable nueva, solicítala al equipo
 
 ### Desglose por sub-proyecto
 
@@ -417,7 +418,7 @@ Cada sub-proyecto maneja sus propias variables de entorno en un archivo `.env` l
 | **Versión** | 5.3 |
 | **Ubicación** | `~/.claude/skills/autosdd/SKILL.md` |
 | **Activación** | Automática en cada conversación de Claude Code |
-| **Desactivación** | Prefijá tu mensaje con `[raw]`, `[no-sdd]`, o `skip autosdd` |
+| **Desactivación** | Prefija tu mensaje con `[raw]`, `[no-sdd]`, o `skip autosdd` |
 
 #### Pipeline de autoSDD
 
@@ -448,7 +449,7 @@ VERSION INIT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → C
 |---------|---------|
 | **Repo** | [github.com/thestark77/e2e-forge](https://github.com/thestark77/e2e-forge) |
 | **Ubicación** | `~/.claude/skills/e2e-forge/` |
-| **Uso** | Escribí `/e2e-forge` en tu sesión de Claude Code |
+| **Uso** | Escribe `/e2e-forge` en tu sesión de Claude Code |
 | **Requisito** | `AXIOM_QUERY_TOKEN` configurado en `backend/.env` |
 
 #### Modos de operación
@@ -508,7 +509,7 @@ VERSION INIT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → C
 
 ## 🎙 Captura de audio con IA (SuperWhisper)
 
-Una de las herramientas más potentes del workflow no es código — es **hablarle a la IA en vez de escribir**. Es mucho más rápido dictar un prompt complejo que tipearlo, especialmente cuando necesitás explicar contexto de negocio.
+Una de las herramientas más potentes del workflow no es código — es **hablarle a la IA en vez de escribir**. Es mucho más rápido dictar un prompt complejo que tipearlo, especialmente cuando necesitas explicar contexto de negocio.
 
 ### Recomendación: SuperWhisper
 
@@ -523,14 +524,14 @@ Una de las herramientas más potentes del workflow no es código — es **hablar
 
 #### Configuración paso a paso
 
-1. **Descargá e instalá** SuperWhisper desde [superwhisper.com](https://superwhisper.com)
-2. **Creá un modo personalizado** para español
-3. **Pegá el prompt de formateo** (ver sección siguiente)
-4. **Seleccioná el modelo** — recomiendo Whisper local para velocidad, o API para máxima calidad
-5. **Configurá el atajo de teclado** — recomendado: `Ctrl+Shift+Space` o similar
-6. **Probá** con un mensaje de voz corto
+1. **Descarga e instala** SuperWhisper desde [superwhisper.com](https://superwhisper.com)
+2. **Crea un modo personalizado** para español
+3. **Pega el prompt de formateo** (ver sección siguiente)
+4. **Selecciona el modelo** — recomiendo Whisper local para velocidad, o API para máxima calidad
+5. **Configura el atajo de teclado** — recomendado: `Ctrl+Shift+Space` o similar
+6. **Prueba** con un mensaje de voz corto
 
-#### Qué hace SuperWhisper por vos
+#### Qué hace SuperWhisper por ti
 
 - ✅ Elimina muletillas ("eh", "este", "o sea")
 - ✅ Formatea el texto correctamente (puntuación, párrafos)
@@ -539,20 +540,20 @@ Una de las herramientas más potentes del workflow no es código — es **hablar
 
 ### Alternativa gratuita: ChatGPT / Claude por voz
 
-Si no tenés licencia de SuperWhisper, podés usar cualquier chat con IA que tenga input de voz:
+Si no tienes licencia de SuperWhisper, puedes usar cualquier chat con IA que tenga input de voz:
 
-1. Abrí **ChatGPT** (recomendado — mejor reconocimiento de voz) o **Claude** en el browser
-2. Creá una conversación nueva
-3. Pegá el **prompt de formateo** (abajo)
-4. Usá el botón de **input de voz** para dictar
+1. Abre **ChatGPT** (recomendado — mejor reconocimiento de voz) o **Claude** en el browser
+2. Crea una conversación nueva
+3. Pega el **prompt de formateo** (abajo)
+4. Usa el botón de **input de voz** para dictar
 5. La IA va a formatear y limpiar tu texto
-6. Copiá el resultado y pegalo donde lo necesités
+6. Copia el resultado y pégalo donde lo necesites
 
 > 💡 **ChatGPT 5.2** es la opción recomendada — rápido, barato, incluso tiene plan gratuito.
 
 ### Prompt de formateo de audio (español)
 
-Copiá y pegá este prompt completo en SuperWhisper (como modo personalizado) o en un chat de IA:
+Copia y pega este prompt completo en SuperWhisper (como modo personalizado) o en un chat de IA:
 
 <details>
 <summary><strong>Click para ver el prompt completo</strong></summary>
@@ -665,7 +666,7 @@ Para reportar problemas o mejoras sobre las herramientas de IA (skills, plugins,
 
 **Flujo:**
 
-1. **Escribí "FEEDBACK DE USO"** en tu sesión de Claude Code
+1. **Escribe "FEEDBACK DE USO"** en tu sesión de Claude Code
 2. **La IA te guía** por la plantilla (`feedback/FEEDBACK_TEMPLATE.md`)
 3. **Se genera un archivo** `proposals/{tu-github}-{descripcion-corta}.md`
 4. **Se crea una PR** en el repo que corresponda:
@@ -680,7 +681,7 @@ Para reportar problemas o mejoras sobre las herramientas de IA (skills, plugins,
 
 ### 2. Descubrimientos del Proyecto — "DESCUBRIMIENTO"
 
-Acá está la magia del trabajo colectivo con IA. Cada desarrollador, en sus sesiones diarias, **descubre cosas sobre el proyecto** que no estaban documentadas:
+Aquí está la magia del trabajo colectivo con IA. Cada desarrollador, en sus sesiones diarias, **descubre cosas sobre el proyecto** que no estaban documentadas:
 
 - Lógica de negocio oculta en el código
 - Funciones específicas que nadie sabía que existían
@@ -690,7 +691,7 @@ Acá está la magia del trabajo colectivo con IA. Cada desarrollador, en sus ses
 
 **Flujo:**
 
-1. **Escribí "DESCUBRIMIENTO"** en tu sesión de Claude Code
+1. **Escribe "DESCUBRIMIENTO"** en tu sesión de Claude Code
 2. **La IA te guía** por la plantilla (`feedback/DISCOVERY_TEMPLATE.md`)
 3. **Se genera un archivo** `proposals/{tu-github}-{descripcion-corta}.md` que incluye:
    - Qué se descubrió
@@ -701,7 +702,7 @@ Acá está la magia del trabajo colectivo con IA. Cada desarrollador, en sus ses
 5. **El equipo revisa y vota** — si tiene sentido, se mergea
 6. **El conocimiento se integra** — toda IA de todo el equipo se beneficia
 
-> **Cada descubrimiento que compartís hace que la IA sea más inteligente para TODO el equipo.** Es como entrenar un cerebro colectivo.
+> **Cada descubrimiento que compartes hace que la IA sea más inteligente para TODO el equipo.** Es como entrenar un cerebro colectivo.
 
 ### Ejemplos de descubrimientos valiosos
 
@@ -719,7 +720,7 @@ Acá está la magia del trabajo colectivo con IA. Cada desarrollador, en sus ses
 - `feedback/DISCOVERY_TEMPLATE.md` — Plantilla para descubrimientos
 - `proposals/` — Carpeta donde quedan los archivos mergeados como registro permanente
 
-> No necesitás saber cómo arreglarlo técnicamente — describí lo que encontraste y el equipo decide juntos cómo integrarlo.
+> No necesitas saber cómo arreglarlo técnicamente — describe lo que encontraste y el equipo decide juntos cómo integrarlo.
 
 ---
 
@@ -728,18 +729,18 @@ Acá está la magia del trabajo colectivo con IA. Cada desarrollador, en sus ses
 ### Flujo diario de trabajo
 
 ```bash
-# 1. Abrí la terminal en la carpeta del proyecto
+# 1. Abre la terminal en la carpeta del proyecto
 cd Bemovil2.0
 
-# 2. Arrancá Claude Code
+# 2. Arranca Claude Code
 claude
 
 # 3. autoSDD se activa automáticamente
 #    La IA ya conoce el contexto del proyecto, las convenciones,
 #    la lógica de negocio, y tiene acceso a los skills.
 
-# 4. Pedí lo que necesités
-#    Ejemplo: "Creá un endpoint para consultar el saldo de un negocio"
+# 4. Pide lo que necesites
+#    Ejemplo: "Crea un endpoint para consultar el saldo de un negocio"
 #    autoSDD va a: crear versión → planificar → delegar a backend-dev → ejecutar
 ```
 
@@ -747,12 +748,12 @@ claude
 
 | Situación | Qué hacer |
 |-----------|-----------|
-| Tarea compleja (nuevo feature) | Dejá que autoSDD orqueste — describí el resultado esperado |
-| Pregunta rápida | Prefijá con `[raw]` para saltear autoSDD |
-| Crear tests E2E | Escribí `/e2e-forge` y seguí las instrucciones |
-| Revisar código | Usá el plugin `code-review` sobre un PR |
-| Buscar un skill | Preguntá "¿qué skills tengo disponibles?" |
-| Memoria entre sesiones | Engram guarda automáticamente — preguntá "¿qué recordás de la sesión anterior?" |
+| Tarea compleja (nuevo feature) | Deja que autoSDD orqueste — describe el resultado esperado |
+| Pregunta rápida | Prefija con `[raw]` para saltear autoSDD |
+| Crear tests E2E | Escribe `/e2e-forge` y sigue las instrucciones |
+| Revisar código | Usa el plugin `code-review` sobre un PR |
+| Buscar un skill | Pregunta "¿qué skills tengo disponibles?" |
+| Memoria entre sesiones | Engram guarda automáticamente — pregunta "¿qué recuerdas de la sesión anterior?" |
 | Browser testing | Siempre con `--headed` para ver el navegador |
 
 ### Comandos especiales dentro de Claude Code
@@ -802,8 +803,9 @@ cd bemovil2-proxy && pnpm dev            # Servidor de desarrollo
 # ═══════════════════════════════════════
 # Utilidades
 # ═══════════════════════════════════════
-npx playwright install chromium          # Instalar Playwright
-npx playwright test --headed             # Correr tests de browser
+npm install -g playwright                # Instalar Playwright CLI
+playwright install chromium              # Instalar browser Chromium
+playwright test --headed                 # Correr tests de browser
 ```
 
 ---
@@ -815,10 +817,10 @@ npx playwright test --headed             # Correr tests de browser
 
 **Causa**: Tu cuenta de GitHub no está en la organización IT-Bemovil.
 
-**Solución**: Pedile al Tech Lead que te agregue a la org [IT-Bemovil](https://github.com/IT-Bemovil) en GitHub. Necesitás acceso de lectura como mínimo.
+**Solución**: Solicita que te agreguen a la org [IT-Bemovil](https://github.com/IT-Bemovil) en GitHub. Necesitas acceso de lectura como mínimo.
 
 ```bash
-# Después de que te agreguen, clonalo manualmente:
+# Después de que te agreguen, clónalo manualmente:
 cd Bemovil2.0
 git clone https://github.com/IT-Bemovil/bemovil2.0-backend.git backend
 ```
@@ -830,12 +832,12 @@ git clone https://github.com/IT-Bemovil/bemovil2.0-backend.git backend
 **Causa**: La skill de autoSDD no se instaló correctamente.
 
 **Solución**:
-1. Verificá que existe `~/.claude/skills/autosdd/SKILL.md`
-2. Si no existe, reinstalá:
+1. Verifica que existe `~/.claude/skills/autosdd/SKILL.md`
+2. Si no existe, reinstala:
    ```bash
    bash <(curl -fsSL https://raw.githubusercontent.com/thestark77/autosdd/main/install.sh)
    ```
-3. Reiniciá Claude Code
+3. Reinicia Claude Code
 </details>
 
 <details>
@@ -844,9 +846,9 @@ git clone https://github.com/IT-Bemovil/bemovil2.0-backend.git backend
 **Causa**: Faltan variables de entorno requeridas.
 
 **Solución**:
-1. Revisá `backend/config/env.config.ts` para ver qué variables son obligatorias
-2. Compará con tu `.env` — probablemente te faltan algunas
-3. Pedile al Tech Lead las variables de sandbox
+1. Revisa `backend/config/env.config.ts` para ver qué variables son obligatorias
+2. Compara con tu `.env` — probablemente te faltan algunas
+3. Solicita las variables de sandbox al equipo
 </details>
 
 <details>
@@ -854,7 +856,7 @@ git clone https://github.com/IT-Bemovil/bemovil2.0-backend.git backend
 
 **Causa**: Falta el `AXIOM_QUERY_TOKEN` en `backend/.env`.
 
-**Solución**: Pedile al Tech Lead el token de Axiom y agregalo a `backend/.env`:
+**Solución**: Solicita el token de Axiom al equipo y agrégalo a `backend/.env`:
 ```bash
 AXIOM_QUERY_TOKEN=xapt-xxxxxxxx
 ```
@@ -867,7 +869,8 @@ AXIOM_QUERY_TOKEN=xapt-xxxxxxxx
 
 **Solución**:
 ```bash
-npx playwright install chromium
+npm install -g playwright
+playwright install chromium
 ```
 </details>
 
@@ -876,7 +879,7 @@ npx playwright install chromium
 
 **Causa**: Primera ejecución o token expirado.
 
-**Solución**: Seguí las instrucciones en pantalla para autenticarte con tu cuenta de Anthropic (la que tiene el plan Pro que paga la empresa).
+**Solución**: Sigue las instrucciones en pantalla para autenticarte con tu cuenta de Anthropic (la que tiene el plan Pro que paga la empresa).
 </details>
 
 <details>
@@ -884,7 +887,7 @@ npx playwright install chromium
 
 **Causa**: Estás usando CMD en vez de PowerShell o Git Bash.
 
-**Solución**: Usá una de estas opciones:
+**Solución**: Usa una de estas opciones:
 - **PowerShell**: `.\install.ps1`
 - **Git Bash**: `bash install.sh`
 - **WSL**: `bash install.sh`
@@ -906,12 +909,12 @@ npx playwright install chromium
 
 Este kit es de todo el equipo. Hay varias formas de contribuir:
 
-1. **Sistema de feedback** — Escribí "FEEDBACK DE USO" en tu sesión de Claude Code
-2. **PRs directos** — Si sabés exactamente qué cambiar, mandá un PR al repo
-3. **Issues** — Reportá bugs o sugerencias en [github.com/thestark77/be-code-kit/issues](https://github.com/thestark77/be-code-kit/issues)
-4. **Conversación** — Hablalo con el equipo, las mejores ideas salen de la discusión
+1. **Sistema de feedback** — Escribe "FEEDBACK DE USO" en tu sesión de Claude Code
+2. **PRs directos** — Si sabes exactamente qué cambiar, manda un PR al repo
+3. **Issues** — Reporta bugs o sugerencias en [github.com/thestark77/be-code-kit/issues](https://github.com/thestark77/be-code-kit/issues)
+4. **Conversación** — Háblalo con el equipo, las mejores ideas salen de la discusión
 
-> Si algo no funciona, si algo te parece raro, si encontrás una mejor forma de hacer algo — **decilo**. Este kit mejora con el input de todos.
+> Si algo no funciona, si algo te parece raro, si encuentras una mejor forma de hacer algo — **dilo**. Este kit mejora con el input de todos.
 
 ---
 
