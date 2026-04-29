@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/be--code--kit-v1.0-blue?style=for-the-badge" alt="version" />
   <img src="https://img.shields.io/badge/autoSDD-v5.3-green?style=for-the-badge" alt="autoSDD" />
-  <img src="https://img.shields.io/badge/skills-17%2B-purple?style=for-the-badge" alt="skills" />
+  <img src="https://img.shields.io/badge/skills-16%2B-purple?style=for-the-badge" alt="skills" />
   <img src="https://img.shields.io/badge/plugins-5-orange?style=for-the-badge" alt="plugins" />
 </p>
 
@@ -30,7 +30,7 @@
 - [Lo que queda instalado](#-lo-que-queda-instalado)
   - [autoSDD v5.3](#autosdd-v53)
   - [E2E Forge](#e2e-forge)
-  - [Skills (17+)](#skills-instaladas-17)
+  - [Skills (16+)](#skills-instaladas-17)
   - [Plugins (5)](#plugins-instalados-5)
 - [Captura de audio con IA (SuperWhisper)](#-captura-de-audio-con-ia-superwhisper)
 - [Sistema de Feedback Participativo](#-sistema-de-feedback-participativo)
@@ -51,7 +51,7 @@
 
 - **autoSDD v5.3** — Framework de desarrollo autónomo que orquesta sub-agentes de IA
 - **E2E Forge** — Skill personalizada para tests E2E automatizados con logs reales de Axiom
-- **17+ skills de desarrollo** — Desde prompt engineering hasta diseño de interfaces
+- **16+ skills de desarrollo** — Desde prompt engineering hasta diseño de interfaces
 - **5 plugins de Claude Code** — Powerline, Engram, code review, y más
 - **Engram MCP** — Memoria persistente entre sesiones
 - **Contexto completo del proyecto** — Business logic, guidelines, convenciones, agentes especializados
@@ -213,10 +213,10 @@ Clona el repo de [E2E Forge](https://github.com/thestark77/e2e-forge) y ejecuta 
 
 Instala skills que autoSDD no incluye por defecto:
 - Caveman (comunicación ultra-comprimida)
-- Superpowers (descubrimiento de skills)
 - Vercel React best practices
 - shadcn component management
 - SDD Agent Team (branch-pr, judgment-day)
+- David Castagneto skills
 
 Y los 5 plugins de Claude Code (powerline, engram, frontend-design, code-review, code-simplifier).
 </details>
@@ -463,7 +463,7 @@ VERSION INIT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → C
 
 ---
 
-### Skills instaladas (17+)
+### Skills instaladas (16+)
 
 | Skill | Fuente | Propósito |
 |-------|--------|-----------|
@@ -479,7 +479,6 @@ VERSION INIT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → C
 | `caveman` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Comunicación ultra-comprimida (ahorra tokens) |
 | `caveman-review` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Code review comprimido |
 | `compress` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Compresión de archivos de memoria |
-| `using-superpowers` | [obra/superpowers](https://github.com/obra/superpowers) | Descubrimiento y uso de skills |
 | `vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | Patrones de React/Next.js de Vercel |
 | `postgresql-table-design` | [wshobson/agents](https://github.com/wshobson/agents) | Diseño de esquemas PostgreSQL |
 | `shadcn` | [shadcn-ui/ui](https://github.com/shadcn-ui/ui) | Gestión de componentes shadcn |

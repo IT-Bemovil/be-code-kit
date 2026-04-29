@@ -283,7 +283,6 @@ print_step 7 "Instalando skills y plugins adicionales..."
 # Skills that autoSDD might NOT install (extras for Bemovil workflow)
 EXTRA_SKILLS=(
   "JuliusBrussee/caveman"
-  "obra/superpowers"
   "vercel-labs/agent-skills"
   "shadcn-ui/ui"
   "gentleman-programming/sdd-agent-team"
