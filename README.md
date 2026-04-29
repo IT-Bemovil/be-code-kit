@@ -32,6 +32,7 @@
   - [E2E Forge](#e2e-forge)
   - [Skills (16+)](#skills-instaladas-17)
   - [Plugins (5)](#plugins-instalados-5)
+  - [Linear MCP](#linear-mcp--gestión-de-tareas)
 - [Captura de audio con IA (SuperWhisper)](#-captura-de-audio-con-ia-superwhisper)
 - [Sistema de Feedback Participativo](#-sistema-de-feedback-participativo)
   - [Feedback de Herramientas](#1-feedback-de-herramientas--feedback-de-uso)
@@ -54,6 +55,7 @@
 - **16+ skills de desarrollo** — Desde prompt engineering hasta diseño de interfaces
 - **5 plugins de Claude Code** — Powerline, Engram, code review, y más
 - **Engram MCP** — Memoria persistente entre sesiones
+- **Linear MCP** — Gestión de tareas e issues directamente desde Claude Code
 - **Contexto completo del proyecto** — Business logic, guidelines, convenciones, agentes especializados
 - **4 repositorios clonados** — Backend, Frontend, Admin, y Proxy de Bemovil 2.0
 
@@ -219,6 +221,8 @@ Instala skills que autoSDD no incluye por defecto:
 - David Castagneto skills
 
 Y los 5 plugins de Claude Code (powerline, engram, frontend-design, code-review, code-simplifier).
+
+Tambien configura el MCP server de **Linear** para gestion de tareas directamente desde Claude Code.
 </details>
 
 <details>
@@ -504,6 +508,24 @@ VERSION INIT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → C
 | **frontend-design** | Plugin de diseño UI — genera interfaces de alta calidad |
 | **code-review** | Review de código automatizado sobre PRs |
 | **code-simplifier** | Simplificación y refactoring de código |
+
+---
+
+### Linear MCP -- Gestion de tareas
+
+El installer configura automaticamente el MCP server de **Linear**, que permite a Claude Code interactuar directamente con tu workspace de Linear (issues, proyectos, ciclos, documentos).
+
+**Autenticacion requerida**: despues de la instalacion, debes autenticarte una sola vez:
+
+1. Abre Claude Code en tu proyecto
+2. Escribe `/mcp` en el prompt
+3. Selecciona `linear-server` y sigue el flujo de autenticacion con tu cuenta de Linear
+
+**Ejemplo de uso** -- una vez autenticado, puedes pedirle a Claude cosas como:
+
+> Revisa todos mis issues pendientes en Linear y dame el listado en orden de prioridad
+
+Claude leera tus issues, los organizara por prioridad, y te dara un resumen accionable directamente en la terminal.
 
 ---
 

@@ -27,7 +27,7 @@ function Print-Header {
   Write-Host "be-code-kit" -NoNewline -ForegroundColor White
   Write-Host " — Bemovil 2.0 Dev Environment Setup     " -NoNewline
   Write-Host "║" -ForegroundColor Cyan
-  Write-Host "  ║  Replicates the Tech Lead's exact Claude Code setup  ║" -ForegroundColor Cyan
+  Write-Host "  ║  Replicates the team's exact Claude Code setup        ║" -ForegroundColor Cyan
   Write-Host "  ╚══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
   Write-Host ""
 }
@@ -381,6 +381,18 @@ foreach ($plugin in $Plugins) {
   }
 }
 
+# MCP Servers
+Write-Host ""
+Print-Info "Configurando MCP servers..."
+
+Print-Info "MCP: linear-server..."
+$result = claude mcp add linear-server --transport sse --url "https://mcp.linear.app/sse" 2>&1
+if ($LASTEXITCODE -eq 0) {
+  Print-Ok "linear-server MCP configurado (requiere autenticación)"
+} else {
+  Print-Info "linear-server ya configurado o no disponible"
+}
+
 # ═══════════════════════════════════════════
 # STEP 8: Initialize git repo at root
 # ═══════════════════════════════════════════
@@ -445,7 +457,7 @@ if ($Warnings.Count -gt 0) {
 Write-Host ""
 Write-Host "  Próximos pasos:" -ForegroundColor White
 Write-Host "    1. Pega tus variables de entorno (.env) en cada sub-proyecto"
-Write-Host "       → Pide las credenciales de sandbox a tu Tech Lead"
+Write-Host "       → Pide las credenciales de sandbox a tu equipo"
 Write-Host "    2. Instala dependencias en cada proyecto: cd backend && $PkgMgr install"
 Write-Host "    3. Abre Claude Code: cd $TargetDir && claude"
 Write-Host "    4. Configura Axiom: pega el AXIOM_QUERY_TOKEN en backend/.env"

@@ -25,7 +25,7 @@ print_header() {
   echo ""
   echo -e "${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
   echo -e "${CYAN}║${NC}  ${BOLD}be-code-kit${NC} — Bemovil 2.0 Dev Environment Setup     ${CYAN}║${NC}"
-  echo -e "${CYAN}║${NC}  Replicates the Tech Lead's exact Claude Code setup  ${CYAN}║${NC}"
+  echo -e "${CYAN}║${NC}  Replicates the team's exact Claude Code setup        ${CYAN}║${NC}"
   echo -e "${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
   echo ""
 }
@@ -321,6 +321,17 @@ for plugin in "${PLUGINS[@]}"; do
   fi
 done
 
+# MCP Servers
+echo ""
+print_info "Configurando MCP servers..."
+
+echo -e "  ${CYAN}→${NC} MCP: linear-server..."
+if claude mcp add linear-server --transport sse --url "https://mcp.linear.app/sse" 2>/dev/null; then
+  print_ok "linear-server MCP configurado (requiere autenticación)"
+else
+  print_info "linear-server ya configurado o no disponible"
+fi
+
 # ═══════════════════════════════════════════
 # STEP 8: Initialize git repo at root
 # ═══════════════════════════════════════════
@@ -378,7 +389,7 @@ fi
 echo ""
 echo -e "  ${BOLD}Próximos pasos:${NC}"
 echo -e "    1. Pega tus variables de entorno (.env) en cada sub-proyecto"
-echo -e "       → Pide las credenciales de sandbox a tu Tech Lead"
+echo -e "       → Pide las credenciales de sandbox a tu equipo"
 echo -e "    2. Instala dependencias en cada proyecto: cd backend && $PKG_MGR install"
 echo -e "    3. Abre Claude Code: cd $TARGET_DIR && claude"
 echo -e "    4. Configura Axiom: pega el AXIOM_QUERY_TOKEN en backend/.env"
