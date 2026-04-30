@@ -18,7 +18,7 @@ if (-not $TargetDir) {
   $TargetDir = Join-Path (Split-Path -Parent $ScriptDir) "Bemovil2.0"
 }
 
-# ── Helpers ──────────────────────────────────────────
+# ── Helpers ──────────────────────────────────────────────────
 
 function Print-Header {
   Write-Host ""
@@ -264,7 +264,7 @@ foreach ($dir in $Repos.Keys) {
 # ═══════════════════════════════════════════
 # STEP 5: Install autoSDD
 # ═══════════════════════════════════════════
-Print-Step 5 "Instalando autoSDD v5.3..."
+Print-Step 5 "Instalando autoSDD..."
 Print-Info "Esto abrirá el instalador interactivo de autoSDD."
 Print-Info "Selecciona los agentes que uses (al menos claude-code)."
 Write-Host ""

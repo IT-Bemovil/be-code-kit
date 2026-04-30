@@ -229,7 +229,7 @@ done
 # ═══════════════════════════════════════════
 # STEP 5: Install autoSDD
 # ═══════════════════════════════════════════
-print_step 5 "Instalando autoSDD v5.3..."
+print_step 5 "Instalando autoSDD..."
 print_info "Esto abrirá el instalador interactivo de autoSDD."
 print_info "Selecciona los agentes que uses (al menos claude-code)."
 echo ""
