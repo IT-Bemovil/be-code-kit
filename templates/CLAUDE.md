@@ -7,7 +7,7 @@ Monorepo with 4 sub-projects: Backend API, Frontend transactional portal, Admin 
 ## Read Before Coding
 
 | Document | Purpose |
-|----------|---------|
+|----------|----------|
 | `context/guidelines.md` | **Constitution** — stack, conventions, patterns, security, testing, gotchas |
 | `context/business_logic.md` | **Domain** — entities, workflows, terminology, transaction engine, commissions |
 | `context/user_context.md` | **User Profile** — identity, preferences, workflow style |
@@ -18,7 +18,7 @@ Monorepo with 4 sub-projects: Backend API, Frontend transactional portal, Admin 
 Each sub-project has its own CLAUDE.md with stack, commands, conventions, and deployment. **Always read the relevant sub-project file before coding.**
 
 | Sub-Project | CLAUDE.md | Purpose |
-|-------------|-----------|---------|
+|-------------|-----------|----------|
 | Backend | `backend/CLAUDE.md` | Express 5 API · TypeScript · Sequelize · MySQL · Redis · Zod · Provider classes |
 | Frontend | `frontend/CLAUDE.md` | Vue 3 SPA · Vite · Vuex · Tailwind · Transactional portal (bemovil.net) |
 | Admin | `admin/CLAUDE.md` | Vue 3 SPA · Internal portal → BeOne CRM/ERP |
@@ -27,10 +27,23 @@ Each sub-project has its own CLAUDE.md with stack, commands, conventions, and de
 ## Project-Level Skill Routing
 
 | Context Pattern | Skill | Trigger |
-|----------------|-------|---------|
+|----------------|-------|----------|
 | `e2e.test.ts`, API test creation/update/audit | `e2e-forge` | E2E tests for backend endpoints. Uses Axiom logs + CREA + TDD loops |
 | `doc.md`, endpoint documentation | `e2e-forge` (Mode 4: DOCUMENT) | Endpoint documentation generation |
 | OLD routes (express-validator + middleware) | `migration-agent` | Migrate to NEW pattern (Zod + helpers). See `context/guidelines.md` Section 2 |
+
+## External Service Routing
+
+These services have MCP/CLI tools available. **NEVER search the codebase for this data** — use the tools directly.
+
+| Need | Tool | How |
+|------|------|-----|
+| Query Axiom logs (errors, traffic, latency, debugging) | e2e-forge scripts | `npx tsx ~/.claude/skills/e2e-forge/scripts/extract-axiom.ts --endpoint {path} --days {N}` |
+| Axiom dataset discovery | e2e-forge scripts | `npx tsx ~/.claude/skills/e2e-forge/scripts/extract-axiom.ts --discover` |
+| Manage Linear issues, tasks, projects, cycles | Linear MCP (`linear-server`) | Use Linear MCP tools: `list_issues`, `save_issue`, `get_issue`, `search_documentation` |
+| Linear project/sprint tracking | Linear MCP (`linear-server`) | `list_projects`, `list_cycles`, `list_milestones` |
+
+> **Why?** AI agents naturally try to search the codebase when asked about logs or tasks. Axiom data lives in Axiom (not in code), and Linear issues live in Linear (not in files). Route these requests to the correct tools.
 
 ## Team Knowledge Sharing — Proposals
 
@@ -121,18 +134,28 @@ Every time a backend endpoint is **created or modified**, the agent MUST generat
 | Axiom extraction | Query `bemovil2` + `errors` datasets for production traffic | Add real usage stats, error rates, response times |
 | Dependency mapping | List every model, helper, config, and external provider used | Complete dependency graph in doc.md |
 
-## autoSDD v5.3 — Active Pipeline (DO NOT REMOVE)
+<!-- autosdd:start -->
+## autoSDD v6.0 — Active Pipeline (DO NOT REMOVE)
 
 ALL prompts go through autoSDD unless `[raw]`, `[no-sdd]`, or `skip autosdd`.
 
 ### Core Rules
 1. **DELEGATE** — never write 2+ files inline. Read SKILL.md Section 1.
-2. **VERSION FIRST** — before planning, create `context/appVersions/vX.Y.Z/` + save `original_prompt.md`
-3. **PROGRESS.md is sacred** — update at every step. It's your compaction survival anchor.
-4. **Feedback after every task** — ask user ≥1 strategic question. Persist answers.
+2. **VERSION FIRST** — run `scripts/version-init.sh` (or `.ps1`) + save `original_prompt.md`
+3. **CONTEXT SCOUT** — launch haiku scout (Step 0.5) before triage. Structured brief, not raw dumps.
+4. **PROGRESS.md is sacred** — update at every step. Compaction survival anchor.
+5. **Event-driven ONLY** — Monitor Tool for waits. Background Agent for async. NEVER sleep/poll.
+6. **Feedback after every task** — ask user ≥1 strategic question. Persist answers.
 
 ### Pipeline
-`VERSION INIT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → CLOSE → KNOWLEDGE UPDATE`
+`VERSION INIT → CONTEXT SCOUT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → CLOSE → KNOWLEDGE UPDATE`
+
+### Model Assignments (extends gentle-ai)
+| Role | Model |
+|------|-------|
+| context-scout, version-close, knowledge-update, precompact-save | haiku |
+| task execution (default) | sonnet |
+| architecture/design | opus |
 
 ### Routing (if X → use Y skill)
 | Context | Skill |
@@ -153,14 +176,14 @@ Before reading 4+ files → check Engram `knowledge/{project}/{topic}` for cache
 After understanding a flow → save a 20-line map to Engram.
 
 ### Compaction Recovery (read this AFTER any compaction)
-1. Read `PROGRESS.md` (your state anchor)
-2. Read current version's `prompt.md`
+1. Read `PROGRESS.md` (ONLY this — your state anchor)
+2. Read current version's `prompt.md` (your plan)
 3. `mem_context()` + `mem_search("session/{project}")`
-4. Resume from where PROGRESS.md says
+4. Resume from PROGRESS.md state — do NOT read other files unless PROGRESS.md says you need them
 
 ### Hooks
-- **SubagentStop**: Update PROGRESS.md + save observation + check feedback debt
-- **PreCompact**: Save ALL state to PROGRESS.md + Engram NOW (compaction imminent)
+- **SubagentStop**: Update PROGRESS.md + save observation + check feedback debt (skips utility agents)
+- **PreCompact**: Delegate to haiku: save ALL state to PROGRESS.md + Engram NOW
 - **Stop**: Check feedback.md generated + PROGRESS.md current
 - **UserPromptSubmit**: Reset stop-hook debounce
 
@@ -169,3 +192,4 @@ Provides: Engram MCP · SDD phases · persona · model-assignments · branch-pr 
 autoSDD works without it (degraded mode).
 
 Read full framework: `~/.claude/skills/autosdd/SKILL.md`
+<!-- autosdd:end -->
