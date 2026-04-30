@@ -81,7 +81,7 @@ Antes de ejecutar el instalador, necesitas tener estas herramientas instaladas. 
 | 3 | **Claude Code CLI** | `claude --version` | `npm install -g @anthropic-ai/claude-code` |
 | 4 | **pnpm** (recomendado) | `pnpm --version` | `npm install -g pnpm` |
 | 5 | **Acceso a GitHub** | — | Necesitas acceso a la org [IT-Bemovil](https://github.com/IT-Bemovil) |
-| 6 | **Playwright** (opcional) | — | `npm install -g playwright && playwright install chromium` (después de la instalación) |
+| 6 | **Playwright** (auto-instalado por autoSDD, opcional manual) | — | `npm install -g @playwright/cli@latest` |
 
 ### Sobre Claude Code CLI
 
@@ -268,9 +268,10 @@ Solicita el `AXIOM_QUERY_TOKEN` al equipo y pégalo en `backend/.env`. Sin esto,
 
 ### 4. Instalar Playwright (para tests de browser)
 
+> autoSDD instala Playwright CLI automaticamente. Solo ejecuta esto si por alguna razon no quedo instalado.
+
 ```bash
-npm install -g playwright
-playwright install chromium
+npm install -g @playwright/cli@latest
 ```
 
 ### 5. Verificar la instalación
@@ -825,8 +826,8 @@ cd bemovil2-proxy && pnpm dev            # Servidor de desarrollo
 # ═══════════════════════════════════════
 # Utilidades
 # ═══════════════════════════════════════
-npm install -g playwright                # Instalar Playwright CLI
-playwright install chromium              # Instalar browser Chromium
+npm install -g @playwright/cli@latest    # Instalar Playwright CLI
+playwright install chromium              # Instalar browser Chromium (si es necesario)
 playwright test --headed                 # Correr tests de browser
 ```
 
@@ -891,7 +892,7 @@ AXIOM_QUERY_TOKEN=xapt-xxxxxxxx
 
 **Solución**:
 ```bash
-npm install -g playwright
+npm install -g @playwright/cli@latest
 playwright install chromium
 ```
 </details>
