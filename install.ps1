@@ -18,7 +18,7 @@ if (-not $TargetDir) {
   $TargetDir = Join-Path (Split-Path -Parent $ScriptDir) "Bemovil2.0"
 }
 
-# ── Helpers ──────────────────────────────────────────────────
+# ── Helpers ──────────────────────────────────────────
 
 function Print-Header {
   Write-Host ""

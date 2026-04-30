@@ -418,7 +418,7 @@ Cada sub-proyecto maneja sus propias variables de entorno en un archivo `.env` l
 **Framework de desarrollo autónomo** que transforma a Claude Code en un orquestador inteligente que delega trabajo a sub-agentes especializados.
 
 | Aspecto | Detalle |
-|---------|--------|
+|---------|---------|------
 | **Repo** | [github.com/thestark77/autosdd](https://github.com/thestark77/autosdd) |
 | **Versión** | 6.0 |
 | **Ubicación** | `~/.claude/skills/autosdd/SKILL.md` |
@@ -432,7 +432,7 @@ VERSION INIT → CONTEXT SCOUT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE
 ```
 
 1. **VERSION INIT** — Crea `context/appVersions/vX.Y.Z/` y guarda el prompt original
-2. **CONTEXT SCOUT** — Launches a haiku sub-agent to pre-filter relevant context before the orchestrator starts planning
+2. **CONTEXT SCOUT** — Pre-filters relevant context using a lightweight haiku sub-agent before the orchestrator starts
 3. **TRIAGE** — Clasifica la complejidad de la tarea
 4. **ROUTE** — Selecciona el skill apropiado según el contexto
 5. **PLAN (CREA)** — Crea un `prompt.md` estructurado con Contexto, Requisitos, Especificaciones, Acción
@@ -452,7 +452,7 @@ VERSION INIT → CONTEXT SCOUT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE
 **Skill personalizada** para crear tests E2E automatizados conectados con logs de producción reales.
 
 | Aspecto | Detalle |
-|---------|--------|
+|---------|---------|------
 | **Repo** | [github.com/thestark77/e2e-forge](https://github.com/thestark77/e2e-forge) |
 | **Ubicación** | `~/.claude/skills/e2e-forge/` |
 | **Uso** | Escribe `/e2e-forge` en tu sesión de Claude Code |
@@ -479,7 +479,7 @@ VERSION INIT → CONTEXT SCOUT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE
 ### Skills instaladas (16+)
 
 | Skill | Fuente | Propósito |
-|-------|--------|----------|
+|-------|--------|-----------|------
 | `prompt-engineering-patterns` | [wshobson/agents](https://github.com/wshobson/agents) | Patrones avanzados de prompting para LLMs |
 | `frontend-design` | [anthropics/skills](https://github.com/anthropics/skills) | Interfaces frontend production-grade |
 | `interface-design` | [dammyjay93/interface-design](https://github.com/dammyjay93/interface-design) | Diseño de dashboards y paneles admin |
@@ -540,7 +540,7 @@ Una de las herramientas más potentes del workflow no es código — es **hablar
 [SuperWhisper](https://superwhisper.com) es una app de escritorio que captura tu voz y la convierte en texto formateado usando IA. Funciona a nivel del sistema — no solo para código, sino también para mensajes, emails, documentación.
 
 | Aspecto | Detalle |
-|---------|--------|
+|---------|---------|------
 | **Plataformas** | macOS, Windows |
 | **Precio** | ~$5 USD/mes con descuento estudiantil (~20,000 COP/mes) |
 | **Descarga** | [superwhisper.com](https://superwhisper.com) |
