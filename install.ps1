@@ -166,6 +166,15 @@ if (Test-Path $settingsSrc) {
   Print-Ok ".claude/settings.json (hooks) configurado"
 }
 
+# Copy opencode.json and opencode.md (OpenCode CLI config)
+foreach ($f in @("opencode.json", "opencode.md")) {
+  $src = Join-Path $ScriptDir "templates/$f"
+  if (Test-Path $src) {
+    Copy-Item -Path $src -Destination (Join-Path $TargetDir $f) -Force
+    Print-Ok "$f copiado (OpenCode compatible)"
+  }
+}
+
 # Copy context files
 $contextDir = Join-Path $TargetDir "context"
 foreach ($f in @("guidelines.md", "business_logic.md", "user_context.md", "Bemovil2questions.md", "blokayExample.md")) {
@@ -403,7 +412,7 @@ Push-Location $TargetDir
 # Init root git repo if not exists
 if (-not (Test-Path ".git")) {
   git init -q
-  git add CLAUDE.md AGENTS.md .gitignore PROGRESS.md context/ .claude/settings.json 2>$null
+  git add CLAUDE.md AGENTS.md .gitignore PROGRESS.md context/ .claude/settings.json opencode.json opencode.md 2>$null
   git commit -q -m "init: be-code-kit setup"
   Print-Ok "Repositorio raíz inicializado"
 } else {
@@ -459,7 +468,8 @@ Write-Host "  Próximos pasos:" -ForegroundColor White
 Write-Host "    1. Pega tus variables de entorno (.env) en cada sub-proyecto"
 Write-Host "       → Pide las credenciales de sandbox a tu equipo"
 Write-Host "    2. Instala dependencias en cada proyecto: cd backend && $PkgMgr install"
-Write-Host "    3. Abre Claude Code: cd $TargetDir && claude"
+Write-Host "    3. Abrí Claude Code: cd $TargetDir && claude"
+Write-Host "       O OpenCode: cd $TargetDir && opencode"
 Write-Host "    4. Configura Axiom: pega el AXIOM_QUERY_TOKEN en backend/.env"
 Write-Host ""
 Write-Host "  Lee el README.md para el tutorial completo." -ForegroundColor White

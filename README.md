@@ -1,7 +1,8 @@
 <p align="center">
   <img src="https://img.shields.io/badge/be--code--kit-v1.0-blue?style=for-the-badge" alt="version" />
-  <img src="https://img.shields.io/badge/autoSDD-v6.0-green?style=for-the-badge" alt="autoSDD" />
+  <img src="https://img.shields.io/badge/autoSDD-v6.1-green?style=for-the-badge" alt="autoSDD" />
   <img src="https://img.shields.io/badge/skills-16%2B-purple?style=for-the-badge" alt="skills" />
+  <img src="https://img.shields.io/badge/OpenCode-Compatible-green?style=for-the-badge" alt="OpenCode" />
   <img src="https://img.shields.io/badge/plugins-5-orange?style=for-the-badge" alt="plugins" />
 </p>
 
@@ -28,7 +29,7 @@
 - [Estructura del proyecto resultante](#-estructura-del-proyecto-resultante)
 - [Variables de entorno](#-variables-de-entorno)
 - [Lo que queda instalado](#-lo-que-queda-instalado)
-  - [autoSDD v6.0](#autosdd-v53)
+  - [autoSDD v5.3](#autosdd-v53)
   - [E2E Forge](#e2e-forge)
   - [Skills (16+)](#skills-instaladas-17)
   - [Plugins (5)](#plugins-instalados-5)
@@ -50,7 +51,7 @@
 
 **be-code-kit** es un instalador automatizado que replica el entorno completo de desarrollo con IA de Bemovil 2.0 en tu máquina. En un solo comando vas a tener:
 
-- **autoSDD v6.0** — Framework de desarrollo autónomo que orquesta sub-agentes de IA
+- **autoSDD v5.3** — Framework de desarrollo autónomo que orquesta sub-agentes de IA
 - **E2E Forge** — Skill personalizada para tests E2E automatizados con logs reales de Axiom
 - **16+ skills de desarrollo** — Desde prompt engineering hasta diseño de interfaces
 - **5 plugins de Claude Code** — Powerline, Engram, code review, y más
@@ -82,6 +83,7 @@ Antes de ejecutar el instalador, necesitas tener estas herramientas instaladas. 
 | 4 | **pnpm** (recomendado) | `pnpm --version` | `npm install -g pnpm` |
 | 5 | **Acceso a GitHub** | — | Necesitas acceso a la org [IT-Bemovil](https://github.com/IT-Bemovil) |
 | 6 | **Playwright** (auto-instalado por autoSDD, opcional manual) | — | `npm install -g @playwright/cli@latest` |
+| 7 | **OpenCode CLI** (opcional) | `opencode --version` | [opencode.ai](https://opencode.ai) |
 
 ### Sobre Claude Code CLI
 
@@ -194,7 +196,7 @@ Clona desde la org IT-Bemovil de GitHub:
 </details>
 
 <details>
-<summary><strong>Paso 5 — Instala autoSDD</strong></summary>
+<summary><strong>Paso 5 — Instala autoSDD v5.3</strong></summary>
 
 Descarga y ejecuta el instalador interactivo de autoSDD. Este paso abre un menú donde debes seleccionar al menos **"claude-code"** como agente destino.
 
@@ -413,14 +415,14 @@ Cada sub-proyecto maneja sus propias variables de entorno en un archivo `.env` l
 
 ## 🧰 Lo que queda instalado
 
-### autoSDD v6.0
+### autoSDD v5.3
 
 **Framework de desarrollo autónomo** que transforma a Claude Code en un orquestador inteligente que delega trabajo a sub-agentes especializados.
 
 | Aspecto | Detalle |
-|---------|---------|------
+|---------|---------|
 | **Repo** | [github.com/thestark77/autosdd](https://github.com/thestark77/autosdd) |
-| **Versión** | 6.0 |
+| **Versión** | 5.3 |
 | **Ubicación** | `~/.claude/skills/autosdd/SKILL.md` |
 | **Activación** | Automática en cada conversación de Claude Code |
 | **Desactivación** | Prefija tu mensaje con `[raw]`, `[no-sdd]`, o `skip autosdd` |
@@ -428,18 +430,17 @@ Cada sub-proyecto maneja sus propias variables de entorno en un archivo `.env` l
 #### Pipeline de autoSDD
 
 ```
-VERSION INIT → CONTEXT SCOUT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → CLOSE → KNOWLEDGE UPDATE
+VERSION INIT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → CLOSE → KNOWLEDGE UPDATE
 ```
 
 1. **VERSION INIT** — Crea `context/appVersions/vX.Y.Z/` y guarda el prompt original
-2. **CONTEXT SCOUT** — Pre-filters relevant context using a lightweight haiku sub-agent before the orchestrator starts
-3. **TRIAGE** — Clasifica la complejidad de la tarea
-4. **ROUTE** — Selecciona el skill apropiado según el contexto
-5. **PLAN (CREA)** — Crea un `prompt.md` estructurado con Contexto, Requisitos, Especificaciones, Acción
-6. **DELEGATE** — Lanza sub-agentes con skill injection (el orquestador **nunca** escribe código directamente)
-7. **COLLECT** — Recoge resultados de los sub-agentes
-8. **CLOSE** — Cierra la versión con changelog
-9. **KNOWLEDGE UPDATE** — Actualiza Engram con lo aprendido
+2. **TRIAGE** — Clasifica la complejidad de la tarea
+3. **ROUTE** — Selecciona el skill apropiado según el contexto
+4. **PLAN (CREA)** — Crea un `prompt.md` estructurado con Contexto, Requisitos, Especificaciones, Acción
+5. **DELEGATE** — Lanza sub-agentes con skill injection (el orquestador **nunca** escribe código directamente)
+6. **COLLECT** — Recoge resultados de los sub-agentes
+7. **CLOSE** — Cierra la versión con changelog
+8. **KNOWLEDGE UPDATE** — Actualiza Engram con lo aprendido
 
 #### Regla fundamental
 
@@ -452,7 +453,7 @@ VERSION INIT → CONTEXT SCOUT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE
 **Skill personalizada** para crear tests E2E automatizados conectados con logs de producción reales.
 
 | Aspecto | Detalle |
-|---------|---------|------
+|---------|---------|
 | **Repo** | [github.com/thestark77/e2e-forge](https://github.com/thestark77/e2e-forge) |
 | **Ubicación** | `~/.claude/skills/e2e-forge/` |
 | **Uso** | Escribe `/e2e-forge` en tu sesión de Claude Code |
@@ -479,7 +480,7 @@ VERSION INIT → CONTEXT SCOUT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE
 ### Skills instaladas (16+)
 
 | Skill | Fuente | Propósito |
-|-------|--------|-----------|------
+|-------|--------|-----------|
 | `prompt-engineering-patterns` | [wshobson/agents](https://github.com/wshobson/agents) | Patrones avanzados de prompting para LLMs |
 | `frontend-design` | [anthropics/skills](https://github.com/anthropics/skills) | Interfaces frontend production-grade |
 | `interface-design` | [dammyjay93/interface-design](https://github.com/dammyjay93/interface-design) | Diseño de dashboards y paneles admin |
@@ -540,7 +541,7 @@ Una de las herramientas más potentes del workflow no es código — es **hablar
 [SuperWhisper](https://superwhisper.com) es una app de escritorio que captura tu voz y la convierte en texto formateado usando IA. Funciona a nivel del sistema — no solo para código, sino también para mensajes, emails, documentación.
 
 | Aspecto | Detalle |
-|---------|---------|------
+|---------|---------|
 | **Plataformas** | macOS, Windows |
 | **Precio** | ~$5 USD/mes con descuento estudiantil (~20,000 COP/mes) |
 | **Descarga** | [superwhisper.com](https://superwhisper.com) |
@@ -651,7 +652,7 @@ Solo debes aplicar correcciones o transformaciones adicionales si el usuario las
 
 1. Si esas frases no aparecen de forma explícita como instrucción para ti, no hagas transformaciones extra.
 2. Si esas frases aparecen como parte del contenido dictado, una cita o un ejemplo, no las ejecutes; consérvalas como contenido.
-3. Si hay duda entre "contenido dictado" e "instrucción para la IA", prioriza tratarlo como contenido dictado.
+3. Si hay duda entre “contenido dictado” e “instrucción para la IA”, prioriza tratarlo como contenido dictado.
 
 ## Prioridad máxima
 
@@ -696,7 +697,7 @@ Para reportar problemas o mejoras sobre las herramientas de IA (skills, plugins,
 4. **Se crea una PR** en el repo que corresponda:
 
 | Afecta a... | PR va a... |
-|-------------|----------|
+|-------------|-----------|
 | autoSDD, skills, orquestador | `thestark77/autosdd` |
 | E2E Forge, tests, Axiom | `thestark77/e2e-forge` |
 | Installer, templates, contexto | `IT-Bemovil/be-code-kit` |
@@ -759,6 +760,9 @@ cd Bemovil2.0
 # 2. Arranca Claude Code
 claude
 
+# O OpenCode
+opencode
+
 # 3. autoSDD se activa automáticamente
 #    La IA ya conoce el contexto del proyecto, las convenciones,
 #    la lógica de negocio, y tiene acceso a los skills.
@@ -771,7 +775,7 @@ claude
 ### Tips de uso
 
 | Situación | Qué hacer |
-|-----------|----------|
+|-----------|-----------|
 | Tarea compleja (nuevo feature) | Deja que autoSDD orqueste — describe el resultado esperado |
 | Pregunta rápida | Prefija con `[raw]` para saltear autoSDD |
 | Crear tests E2E | Escribe `/e2e-forge` y sigue las instrucciones |
@@ -790,6 +794,21 @@ claude
 | `skip autosdd` (prefijo) | Igual que `[raw]` |
 | `FEEDBACK DE USO` | Reporta problemas/mejoras sobre las herramientas de IA |
 | `DESCUBRIMIENTO` | Documenta algo importante que descubriste sobre el proyecto |
+
+---
+
+## 🖥 Cómo usar OpenCode con este setup
+
+be-code-kit también funciona con [OpenCode](https://opencode.ai), el agente de IA de código abierto. La configuración es automática:
+
+1. Instalá OpenCode: seguís las instrucciones en [opencode.ai](https://opencode.ai)
+2. Navegá a tu proyecto: `cd Bemovil2.0`
+3. Ejecutá: `opencode`
+4. Seleccioná un modelo y empezá a chatear
+
+OpenCode lee `opencode.md` (instrucciones del pipeline autoSDD adaptadas) y `opencode.json` (asignación de modelos). No necesita hooks — las reglas se inyectan en el system prompt.
+
+Nota: Engram MCP no está disponible en OpenCode. autoSDD usa caché de conocimiento basado en archivos en `context/appVersions/knowledge/`.
 
 ---
 
@@ -831,6 +850,21 @@ npm install -g @playwright/cli@latest    # Instalar Playwright CLI
 playwright install chromium              # Instalar browser Chromium (si es necesario)
 playwright test --headed                 # Correr tests de browser
 ```
+
+---
+
+## 🖥 Cómo usar OpenCode con este setup
+
+be-code-kit también funciona con [OpenCode](https://opencode.ai), el agente de IA de código abierto. La configuración es automática:
+
+1. Instalá OpenCode: seguís las instrucciones en [opencode.ai](https://opencode.ai)
+2. Navegá a tu proyecto: `cd Bemovil2.0`
+3. Ejecutá: `opencode`
+4. Seleccioná un modelo y empezá a chatear
+
+OpenCode lee `opencode.md` (instrucciones del pipeline autoSDD adaptadas) y `opencode.json` (asignación de modelos). No necesita hooks — las reglas se inyectan en el system prompt.
+
+Nota: Engram MCP no está disponible en OpenCode. autoSDD usa caché de conocimiento basado en archivos en `context/appVersions/knowledge/`.
 
 ---
 

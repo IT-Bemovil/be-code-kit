@@ -137,6 +137,14 @@ if [ -f "$SCRIPT_DIR/templates/.claude/settings.json" ]; then
   print_ok ".claude/settings.json (hooks) configurado"
 fi
 
+# Copy opencode.json and opencode.md (OpenCode CLI config)
+for f in opencode.json opencode.md; do
+  if [ -f "$SCRIPT_DIR/templates/$f" ]; then
+    cp "$SCRIPT_DIR/templates/$f" "$TARGET_DIR/$f"
+    print_ok "$f copiado (OpenCode compatible)"
+  fi
+done
+
 # Copy context files
 for f in guidelines.md business_logic.md user_context.md Bemovil2questions.md blokayExample.md; do
   if [ -f "$SCRIPT_DIR/templates/context/$f" ]; then
@@ -342,7 +350,7 @@ cd "$TARGET_DIR" || return 1
 # Init root git repo if not exists
 if [ ! -d ".git" ]; then
   git init -q
-  git add CLAUDE.md AGENTS.md .gitignore PROGRESS.md context/ .claude/settings.json 2>/dev/null
+  git add CLAUDE.md AGENTS.md .gitignore PROGRESS.md context/ .claude/settings.json opencode.json opencode.md 2>/dev/null
   git commit -q -m "init: be-code-kit setup"
   print_ok "Repositorio raíz inicializado"
 else
@@ -391,7 +399,8 @@ echo -e "  ${BOLD}Próximos pasos:${NC}"
 echo -e "    1. Pega tus variables de entorno (.env) en cada sub-proyecto"
 echo -e "       → Pide las credenciales de sandbox a tu equipo"
 echo -e "    2. Instala dependencias en cada proyecto: cd backend && $PKG_MGR install"
-echo -e "    3. Abre Claude Code: cd $TARGET_DIR && claude"
+echo -e "    3. Abrí Claude Code: cd $TARGET_DIR && claude"
+echo -e "       O OpenCode: cd $TARGET_DIR && opencode"
 echo -e "    4. Configura Axiom: pega el AXIOM_QUERY_TOKEN en backend/.env"
 echo ""
 echo -e "  ${BOLD}Lee el README.md para el tutorial completo.${NC}"
