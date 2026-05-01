@@ -1,7 +1,6 @@
 # autoSDD v6.1 — OpenCode Instructions (Bemovil 2.0)
 
-> This file is read by OpenCode via contextPaths. It adapts the autoSDD pipeline for OpenCode's tooling.
-> Claude Code CLI uses hooks (.claude/settings.json) — this file is only for OpenCode.
+> This file is loaded by OpenCode via the `instructions` field in opencode.json. OpenCode also reads AGENTS.md automatically by default.
 
 ---
 
@@ -85,10 +84,13 @@ ALL prompts go through autoSDD unless `[raw]`, `[no-sdd]`, or `skip autosdd`.
 
 ### Model Strategy (OpenCode)
 
-When using Task tool, prefer:
-- **explore** subagent: For code exploration and quick searches
-- **general** subagent: For implementation, multi-step tasks
-- **NO polling/sleep**: OpenCode has no "Monitor" or "Background Agent" tool. NEVER use sleep loops, setInterval, or polling. Use Bash for commands and Task tool for parallel sub-agents.
+OpenCode has 5 built-in agents. Model assignments are configured in `opencode.json`:
+
+- **build** (main session): Orchestrator — coordinates, delegates, makes decisions
+- **general** (sub-agent): Implementation — reads code, executes multi-step tasks
+- **explore** (sub-agent): Context scout — quick code exploration and searches
+- **title** (session titles): Cheapest model, generates session titles
+- **compaction** (context compaction): Saves conversation state before compaction
 
 ---
 
@@ -126,5 +128,5 @@ Engram MCP is NOT available in OpenCode. Use file-based knowledge caching instea
 2. **VERSION FIRST** — before planning, create `context/appVersions/vX.Y.Z/` + save `original_prompt.md`
 3. **PROGRESS.md is sacred** — update at every step
 4. **Feedback after every task** — ask user ≥1 strategic question
-5. **Read CLAUDE.md and AGENTS.md** for project-specific conventions
+5. **Read AGENTS.md** for project-specific conventions (OpenCode reads this automatically)
 6. **Read context/guidelines.md and context/business_logic.md** before coding
