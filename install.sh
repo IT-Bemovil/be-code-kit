@@ -2,6 +2,8 @@
 set -uo pipefail
 
 # be-code-kit — Bemovil 2.0 Development Environment Installer
+# Uses stark-kit as foundation (autoSDD + skills + plugins) + Bemovil-specific config
+#
 # Usage:
 #   git clone https://github.com/IT-Bemovil/be-code-kit.git && cd be-code-kit && bash install.sh [TARGET_DIR]
 #
@@ -25,18 +27,18 @@ print_header() {
   echo ""
   echo -e "${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
   echo -e "${CYAN}║${NC}  ${BOLD}be-code-kit${NC} — Bemovil 2.0 Dev Environment Setup     ${CYAN}║${NC}"
-  echo -e "${CYAN}║${NC}  Replicates the team's exact Claude Code setup        ${CYAN}║${NC}"
+  echo -e "${CYAN}║${NC}  stark-kit + Bemovil context, in one command          ${CYAN}║${NC}"
   echo -e "${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
   echo ""
 }
 
 print_step() { echo -e "\n${BLUE}[$1/$TOTAL_STEPS]${NC} ${BOLD}$2${NC}"; }
-print_ok() { echo -e "  ${GREEN}✓${NC} $1"; }
+print_ok()   { echo -e "  ${GREEN}✓${NC} $1"; }
 print_warn() { echo -e "  ${YELLOW}⚠${NC} $1"; }
-print_error() { echo -e "  ${RED}✗${NC} $1"; }
+print_error(){ echo -e "  ${RED}✗${NC} $1"; }
 print_info() { echo -e "  ${CYAN}→${NC} $1"; }
 
-TOTAL_STEPS=8
+TOTAL_STEPS=6
 WARNINGS=()
 CLONED_REPOS=()
 FAILED_REPOS=()
@@ -48,14 +50,12 @@ print_header
 # ═══════════════════════════════════════════
 print_step 0 "Verificando requisitos..."
 
-# Check git
 if ! command -v git &>/dev/null; then
   print_error "git no encontrado. Instálalo primero: https://git-scm.com/downloads"
   return 1
 fi
 print_ok "git instalado"
 
-# Check claude CLI
 if ! command -v claude &>/dev/null; then
   print_error "Claude Code CLI no encontrado."
   echo ""
@@ -67,7 +67,6 @@ if ! command -v claude &>/dev/null; then
 fi
 print_ok "Claude Code CLI instalado"
 
-# Check npm/pnpm
 if command -v pnpm &>/dev/null; then
   PKG_MGR="pnpm"
 elif command -v npm &>/dev/null; then
@@ -79,21 +78,20 @@ fi
 print_ok "$PKG_MGR disponible"
 
 # ═══════════════════════════════════════════
-# STEP 1: Directory validation
+# STEP 1: Directory validation + legacy cleanup
 # ═══════════════════════════════════════════
 print_step 1 "Preparando directorio de destino: ${TARGET_DIR}"
 
 UPDATE_MODE=false
 
 if [ -d "$TARGET_DIR" ]; then
-  # Check if it already has content
   file_count=$(find "$TARGET_DIR" -maxdepth 1 -not -name '.' -not -name '..' -not -name '.git' | wc -l)
 
   if [ "$file_count" -gt 0 ]; then
     echo ""
     print_warn "El directorio ya contiene archivos."
-    print_warn "Se actualizarán los archivos de configuración (CLAUDE.md, context/, .claude/)."
-    print_warn "NO se tocarán las carpetas de repositorios existentes (backend/, frontend/, admin/, bemovil2-proxy/)."
+    print_warn "Se actualizará a la nueva versión (stark-kit + Bemovil config)."
+    print_warn "NO se tocarán repos existentes (backend/, frontend/, admin/, bemovil2-proxy/)."
     echo ""
 
     if [[ -r /dev/tty ]]; then
@@ -108,6 +106,15 @@ if [ -d "$TARGET_DIR" ]; then
     fi
 
     UPDATE_MODE=true
+
+    # Clean up artifacts from old independent be-code-kit installations
+    print_info "Limpiando artefactos de versiones anteriores..."
+    for d in src tests; do
+      if [ -d "$TARGET_DIR/$d" ] && [ -z "$(ls -A "$TARGET_DIR/$d" 2>/dev/null)" ]; then
+        rm -rf "$TARGET_DIR/$d"
+        print_ok "Removido $d/ vacío (artefacto de stark-kit genérico)"
+      fi
+    done
   fi
 fi
 
@@ -115,69 +122,60 @@ mkdir -p "$TARGET_DIR"
 print_ok "Directorio listo: $TARGET_DIR"
 
 # ═══════════════════════════════════════════
-# STEP 2: Copy template files
+# STEP 2: Install stark-kit (foundation)
 # ═══════════════════════════════════════════
-print_step 2 "Copiando archivos de configuración..."
+print_step 2 "Instalando stark-kit (autoSDD + skills + plugins)..."
+print_info "stark-kit instala: autoSDD, skills de desarrollo, plugins, Engram MCP."
+print_info "El instalador de autoSDD te pedirá seleccionar agentes (al menos claude-code)."
+echo ""
 
-# Create directory structure
+if [[ -r /dev/tty ]]; then
+  bash <(curl -fsSL https://raw.githubusercontent.com/thestark77/stark-kit/main/install.sh) "$TARGET_DIR" --yes </dev/tty
+  starkkit_status=$?
+else
+  curl -fsSL https://raw.githubusercontent.com/thestark77/stark-kit/main/install.sh | bash -s -- "$TARGET_DIR" --yes
+  starkkit_status=$?
+fi
+
+if [ $starkkit_status -eq 0 ]; then
+  print_ok "stark-kit instalado exitosamente"
+else
+  print_warn "stark-kit pudo haber tenido errores. Verifica la instalación."
+  WARNINGS+=("Verifica que stark-kit se instaló correctamente: ~/.claude/skills/autosdd/SKILL.md")
+fi
+
+# Remove stark-kit generic dirs not relevant for Bemovil monorepo
+for d in src tests; do
+  if [ -d "$TARGET_DIR/$d" ] && [ -z "$(ls -A "$TARGET_DIR/$d" 2>/dev/null)" ]; then
+    rm -rf "$TARGET_DIR/$d"
+  fi
+done
+
+# ═══════════════════════════════════════════
+# STEP 3: Apply Bemovil-specific configuration
+# ═══════════════════════════════════════════
+print_step 3 "Aplicando configuración específica de Bemovil..."
+
 mkdir -p "$TARGET_DIR/context/appVersions"
 mkdir -p "$TARGET_DIR/.claude"
+mkdir -p "$TARGET_DIR/feedback"
+mkdir -p "$TARGET_DIR/proposals"
 
-# Copy CLAUDE.md, AGENTS.md, .gitignore, PROGRESS.md
+# Override stark-kit generics with Bemovil-specific templates
 for f in CLAUDE.md AGENTS.md .gitignore PROGRESS.md; do
   if [ -f "$SCRIPT_DIR/templates/$f" ]; then
     cp "$SCRIPT_DIR/templates/$f" "$TARGET_DIR/$f"
-    print_ok "$f copiado"
+    print_ok "$f (Bemovil) aplicado"
   fi
 done
 
-# Copy .claude/settings.json (project hooks)
+# Override .claude/settings.json with Bemovil hooks
 if [ -f "$SCRIPT_DIR/templates/.claude/settings.json" ]; then
   cp "$SCRIPT_DIR/templates/.claude/settings.json" "$TARGET_DIR/.claude/settings.json"
-  print_ok ".claude/settings.json (hooks) configurado"
+  print_ok ".claude/settings.json (Bemovil hooks) aplicado"
 fi
 
-# Copy opencode.json and opencode.md (OpenCode CLI config)
-for f in opencode.json opencode.md; do
-  if [ -f "$SCRIPT_DIR/templates/$f" ]; then
-    cp "$SCRIPT_DIR/templates/$f" "$TARGET_DIR/$f"
-    print_ok "$f copiado (OpenCode compatible)"
-  fi
-done
-
-# ── Detect available AI agents ──────────────────────────────────
-echo ""
-print_step "" "Detectando agente de IA..."
-HAS_CLAUDE=false
-HAS_OPENCODE=false
-
-if command -v claude &>/dev/null; then
-  HAS_CLAUDE=true
-  print_ok "Claude Code CLI detectado"
-else
-  print_info "Claude Code CLI no encontrado"
-fi
-
-if command -v opencode &>/dev/null; then
-  HAS_OPENCODE=true
-  print_ok "OpenCode CLI detectado"
-else
-  print_info "OpenCode CLI no encontrado (instalar desde opencode.ai)"
-fi
-
-if $HAS_CLAUDE && $HAS_OPENCODE; then
-  print_ok "Ambos agentes detectados — configuraciones instaladas para ambos (sin conflictos)"
-elif $HAS_CLAUDE; then
-  print_ok "Usando Claude Code CLI — hooks en .claude/settings.json activos"
-elif $HAS_OPENCODE; then
-  print_ok "Usando OpenCode — instrucciones en opencode.md activas (no necesita hooks)"
-else
-  print_warn "Ningún agente de IA detectado. Instalá Claude Code CLI u OpenCode."
-  print_info "  Claude Code: npm install -g @anthropic-ai/claude-code"
-  print_info "  OpenCode:    ver https://opencode.ai"
-fi
-
-# Copy context files
+# Copy Bemovil context files (overrides stark-kit generics + adds Bemovil-specific)
 for f in guidelines.md business_logic.md user_context.md Bemovil2questions.md blokayExample.md; do
   if [ -f "$SCRIPT_DIR/templates/context/$f" ]; then
     cp "$SCRIPT_DIR/templates/context/$f" "$TARGET_DIR/context/$f"
@@ -185,46 +183,16 @@ for f in guidelines.md business_logic.md user_context.md Bemovil2questions.md bl
   fi
 done
 
-# ═══════════════════════════════════════════
-# STEP 3: Create .env template files
-# ═══════════════════════════════════════════
-print_step 3 "Creando plantillas de variables de entorno..."
-
-declare -A REPO_DIRS=(
-  ["backend"]="backend"
-  ["frontend"]="frontend"
-  ["admin"]="admin"
-  ["proxy"]="bemovil2-proxy"
-)
-
-declare -A ENV_FILES=(
-  ["backend"]="backend.env"
-  ["frontend"]="frontend.env"
-  ["admin"]="admin.env"
-  ["proxy"]="proxy.env"
-)
-
-for key in "${!REPO_DIRS[@]}"; do
-  dir="${REPO_DIRS[$key]}"
-  env_file="${ENV_FILES[$key]}"
-  target_env="$TARGET_DIR/$dir/.env"
-
-  # Only create .env if the directory exists and .env doesn't
-  if [ -d "$TARGET_DIR/$dir" ] && [ ! -f "$target_env" ]; then
-    if [ -f "$SCRIPT_DIR/env-templates/$env_file" ]; then
-      cp "$SCRIPT_DIR/env-templates/$env_file" "$target_env"
-      print_ok ".env creado en $dir/ (plantilla vacía)"
-    fi
-  elif [ ! -d "$TARGET_DIR/$dir" ]; then
-    # Directory doesn't exist yet, will be created when repos are cloned
-    print_info ".env de $dir se creará después del clonado"
-  else
-    print_info ".env de $dir ya existe, no se sobreescribe"
+# Copy feedback templates
+for f in FEEDBACK_TEMPLATE.md DISCOVERY_TEMPLATE.md; do
+  if [ -f "$SCRIPT_DIR/feedback/$f" ]; then
+    cp "$SCRIPT_DIR/feedback/$f" "$TARGET_DIR/feedback/$f"
+    print_ok "feedback/$f copiado"
   fi
 done
 
 # ═══════════════════════════════════════════
-# STEP 4: Clone repositories
+# STEP 4: Clone repositories + .env templates
 # ═══════════════════════════════════════════
 print_step 4 "Clonando repositorios de Bemovil 2.0..."
 
@@ -233,6 +201,13 @@ declare -A REPOS=(
   ["frontend"]="https://github.com/IT-Bemovil/bemovil2.0-frontend.git|main"
   ["admin"]="https://github.com/IT-Bemovil/bemovil2.0-frontend-admin.git|main"
   ["bemovil2-proxy"]="https://github.com/IT-Bemovil/bemovil2-proxy.git|main"
+)
+
+declare -A ENV_FILES=(
+  ["backend"]="backend.env"
+  ["frontend"]="frontend.env"
+  ["admin"]="admin.env"
+  ["bemovil2-proxy"]="proxy.env"
 )
 
 for dir in backend frontend admin bemovil2-proxy; do
@@ -250,15 +225,6 @@ for dir in backend frontend admin bemovil2-proxy; do
   if git clone --branch "$default_branch" "$repo_url" "$target_path" 2>/dev/null; then
     print_ok "$dir clonado exitosamente"
     CLONED_REPOS+=("$dir")
-
-    # Create .env from template if it doesn't exist
-    env_key="$dir"
-    [[ "$dir" == "bemovil2-proxy" ]] && env_key="proxy"
-    env_file="${ENV_FILES[$env_key]:-}"
-    if [ -n "$env_file" ] && [ -f "$SCRIPT_DIR/env-templates/$env_file" ] && [ ! -f "$target_path/.env" ]; then
-      cp "$SCRIPT_DIR/env-templates/$env_file" "$target_path/.env"
-      print_ok ".env plantilla creada en $dir/"
-    fi
   else
     print_warn "$dir: no se pudo clonar (¿sin acceso al repo?)"
     FAILED_REPOS+=("$dir")
@@ -266,35 +232,30 @@ for dir in backend frontend admin bemovil2-proxy; do
   fi
 done
 
-# ═══════════════════════════════════════════
-# STEP 5: Install autoSDD
-# ═══════════════════════════════════════════
-print_step 5 "Instalando autoSDD..."
-print_info "Esto abrirá el instalador interactivo de autoSDD."
-print_info "Selecciona los agentes que uses (al menos claude-code)."
+# Create .env templates for all repo dirs (cloned or pre-existing)
 echo ""
-
-if [[ -r /dev/tty ]]; then
-  # Run the autoSDD installer interactively
-  bash <(curl -fsSL https://raw.githubusercontent.com/thestark77/autosdd/main/install.sh) </dev/tty
-  autosdd_status=$?
-else
-  curl -fsSL https://raw.githubusercontent.com/thestark77/autosdd/main/install.sh | bash
-  autosdd_status=$?
-fi
-
-if [ $autosdd_status -eq 0 ]; then
-  print_ok "autoSDD instalado exitosamente"
-else
-  print_warn "autoSDD pudo haber tenido errores. Verifica la instalación."
-  WARNINGS+=("Verifica que autoSDD se instaló correctamente: ~/.claude/skills/autosdd/SKILL.md")
-fi
+print_info "Creando plantillas de variables de entorno..."
+for dir in backend frontend admin bemovil2-proxy; do
+  target_path="$TARGET_DIR/$dir"
+  env_file="${ENV_FILES[$dir]:-}"
+  if [ -d "$target_path" ] && [ -n "$env_file" ] && [ ! -f "$target_path/.env" ]; then
+    if [ -f "$SCRIPT_DIR/env-templates/$env_file" ]; then
+      cp "$SCRIPT_DIR/env-templates/$env_file" "$target_path/.env"
+      print_ok ".env plantilla creada en $dir/"
+    fi
+  elif [ -d "$target_path" ] && [ -f "$target_path/.env" ]; then
+    print_info ".env de $dir ya existe, no se sobreescribe"
+  fi
+done
 
 # ═══════════════════════════════════════════
-# STEP 6: Install E2E Forge
+# STEP 5: Install Bemovil-specific extras
 # ═══════════════════════════════════════════
-print_step 6 "Instalando E2E Forge..."
+print_step 5 "Instalando herramientas específicas de Bemovil..."
 
+# ── E2E Forge ──
+echo ""
+print_info "Instalando E2E Forge..."
 E2E_TMP="/tmp/e2e-forge-install"
 rm -rf "$E2E_TMP"
 
@@ -303,7 +264,6 @@ if git clone --depth 1 https://github.com/thestark77/e2e-forge.git "$E2E_TMP" 2>
     bash "$E2E_TMP/install.sh"
     print_ok "E2E Forge instalado"
   else
-    # Manual copy fallback
     mkdir -p "$HOME/.claude/skills/e2e-forge"
     cp -r "$E2E_TMP/"* "$HOME/.claude/skills/e2e-forge/" 2>/dev/null
     print_ok "E2E Forge copiado manualmente"
@@ -315,57 +275,18 @@ else
   WARNINGS+=("E2E Forge no se instaló. Instálalo manualmente.")
 fi
 
-# ═══════════════════════════════════════════
-# STEP 7: Install additional skills & plugins
-# ═══════════════════════════════════════════
-print_step 7 "Instalando skills y plugins adicionales..."
-
-# Skills that autoSDD might NOT install (extras for Bemovil workflow)
-EXTRA_SKILLS=(
-  "JuliusBrussee/caveman"
-  "vercel-labs/agent-skills"
-  "shadcn-ui/ui"
-  "gentleman-programming/sdd-agent-team"
-  "davidcastagnetoa/skills"
-)
-
-for skill_repo in "${EXTRA_SKILLS[@]}"; do
-  skill_name=$(basename "$skill_repo")
-  echo -e "  ${CYAN}→${NC} Instalando skill: $skill_name..."
-  if claude skill install "github:$skill_repo" 2>/dev/null; then
-    print_ok "$skill_name instalado"
-  else
-    print_info "$skill_name ya instalado o no disponible"
-  fi
-done
-
-# Plugins
+# ── Caveman skill (Bemovil uses it, not in stark-kit) ──
 echo ""
-print_info "Instalando plugins de Claude Code..."
+print_info "Instalando skill: caveman..."
+if claude skill install "github:JuliusBrussee/caveman" 2>/dev/null; then
+  print_ok "caveman instalado"
+else
+  print_info "caveman ya instalado o no disponible"
+fi
 
-PLUGINS=(
-  "claude-powerline@claude-powerline"
-  "engram@engram"
-  "frontend-design@claude-plugins-official"
-  "code-review@claude-plugins-official"
-  "code-simplifier@claude-plugins-official"
-)
-
-for plugin in "${PLUGINS[@]}"; do
-  plugin_name=$(echo "$plugin" | cut -d'@' -f1)
-  echo -e "  ${CYAN}→${NC} Plugin: $plugin_name..."
-  if claude plugin install "$plugin" 2>/dev/null; then
-    print_ok "$plugin_name instalado"
-  else
-    print_info "$plugin_name ya instalado o no disponible"
-  fi
-done
-
-# MCP Servers
+# ── Linear MCP (task management) ──
 echo ""
-print_info "Configurando MCP servers..."
-
-echo -e "  ${CYAN}→${NC} MCP: linear-server..."
+print_info "Configurando MCP: linear-server..."
 if claude mcp add linear-server --transport sse --url "https://mcp.linear.app/sse" 2>/dev/null; then
   print_ok "linear-server MCP configurado (requiere autenticación)"
 else
@@ -373,23 +294,22 @@ else
 fi
 
 # ═══════════════════════════════════════════
-# STEP 8: Initialize git repo at root
+# STEP 6: Finalize
 # ═══════════════════════════════════════════
-print_step 8 "Finalizando configuración..."
+print_step 6 "Finalizando configuración..."
 
 cd "$TARGET_DIR" || return 1
 
-# Init root git repo if not exists
 if [ ! -d ".git" ]; then
   git init -q
-  git add CLAUDE.md AGENTS.md .gitignore PROGRESS.md context/ .claude/settings.json opencode.json opencode.md 2>/dev/null
-  git commit -q -m "init: be-code-kit setup"
+  git add CLAUDE.md AGENTS.md .gitignore PROGRESS.md context/ .claude/settings.json feedback/ 2>/dev/null
+  git add opencode.json opencode.md 2>/dev/null
+  git commit -q -m "init: be-code-kit setup (via stark-kit)"
   print_ok "Repositorio raíz inicializado"
 else
   print_info "Repositorio raíz ya existe"
 fi
 
-# Create appVersions/v0.1.0
 mkdir -p "context/appVersions/v0.1.0"
 
 # ═══════════════════════════════════════════
@@ -401,10 +321,11 @@ echo -e "${GREEN}${BOLD}  ¡Instalación completada!${NC}"
 echo -e "${CYAN}══════════════════════════════════════════════════════${NC}"
 echo ""
 echo -e "  ${BOLD}Directorio:${NC} $TARGET_DIR"
+echo -e "  ${BOLD}Instalado via:${NC} stark-kit → autoSDD → Bemovil config"
 echo ""
 
 if [ ${#CLONED_REPOS[@]} -gt 0 ]; then
-  echo -e "  ${GREEN}Repositorios clonados:${NC}"
+  echo -e "  ${GREEN}Repositorios:${NC}"
   for r in "${CLONED_REPOS[@]}"; do
     echo -e "    ${GREEN}✓${NC} $r"
   done

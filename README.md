@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/be--code--kit-v1.0-blue?style=for-the-badge" alt="version" />
+  <img src="https://img.shields.io/badge/be--code--kit-v2.0-blue?style=for-the-badge" alt="version" />
+  <img src="https://img.shields.io/badge/stark--kit-dependency-blueviolet?style=for-the-badge" alt="stark-kit" />
   <img src="https://img.shields.io/badge/autoSDD-v6.1-green?style=for-the-badge" alt="autoSDD" />
   <img src="https://img.shields.io/badge/skills-16%2B-purple?style=for-the-badge" alt="skills" />
   <img src="https://img.shields.io/badge/OpenCode-Compatible-green?style=for-the-badge" alt="OpenCode" />
@@ -29,9 +30,9 @@
 - [Estructura del proyecto resultante](#-estructura-del-proyecto-resultante)
 - [Variables de entorno](#-variables-de-entorno)
 - [Lo que queda instalado](#-lo-que-queda-instalado)
-  - [autoSDD v5.3](#autosdd-v53)
+  - [stark-kit (base)](#stark-kit-base)
   - [E2E Forge](#e2e-forge)
-  - [Skills (16+)](#skills-instaladas-17)
+  - [Skills (16+)](#skills-instaladas-16)
   - [Plugins (5)](#plugins-instalados-5)
   - [Linear MCP](#linear-mcp--gestión-de-tareas)
 - [Captura de audio con IA (SuperWhisper)](#-captura-de-audio-con-ia-superwhisper)
@@ -49,25 +50,31 @@
 
 ## 🎯 Qué es be-code-kit
 
-**be-code-kit** es un instalador automatizado que replica el entorno completo de desarrollo con IA de Bemovil 2.0 en tu máquina. En un solo comando vas a tener:
+**be-code-kit** es un instalador automatizado que replica el entorno completo de desarrollo con IA de Bemovil 2.0 en tu máquina. Usa [**stark-kit**](https://github.com/thestark77/stark-kit) como base (autoSDD + skills + plugins) y agrega el contexto específico de Bemovil encima. En un solo comando vas a tener:
 
-- **autoSDD v5.3** — Framework de desarrollo autónomo que orquesta sub-agentes de IA
+- **stark-kit** (base) — autoSDD v6.1 + 16+ skills + 5 plugins + Engram MCP
 - **E2E Forge** — Skill personalizada para tests E2E automatizados con logs reales de Axiom
-- **16+ skills de desarrollo** — Desde prompt engineering hasta diseño de interfaces
-- **5 plugins de Claude Code** — Powerline, Engram, code review, y más
-- **Engram MCP** — Memoria persistente entre sesiones
+- **Caveman** — Comunicación ultra-comprimida para ahorro de tokens
 - **Linear MCP** — Gestión de tareas e issues directamente desde Claude Code
 - **Contexto completo del proyecto** — Business logic, guidelines, convenciones, agentes especializados
 - **4 repositorios clonados** — Backend, Frontend, Admin, y Proxy de Bemovil 2.0
 
-Existen dos versiones del kit:
+### Arquitectura de dependencias
+
+```
+be-code-kit (Bemovil context + E2E Forge + extras)
+  └── stark-kit (autoSDD + skills + plugins + Engram)
+        └── autoSDD (framework de desarrollo autónomo)
+```
 
 | Kit | Repo | Descripción |
 |-----|------|-------------|
 | **be-code-kit** | [IT-Bemovil/be-code-kit](https://github.com/IT-Bemovil/be-code-kit) | Versión completa con contexto Bemovil (esta) |
-| **stark-kit** | [thestark77/stark-kit](https://github.com/thestark77/stark-kit) | Versión genérica — solo framework, sin contexto empresarial |
+| **stark-kit** | [thestark77/stark-kit](https://github.com/thestark77/stark-kit) | Base genérica — framework + skills + plugins, sin contexto empresarial |
 
 > 💡 Si eres externo a Bemovil o quieres usar el framework en otro proyecto, usa **stark-kit**.
+> 
+> ⚠️ **Breaking change v2.0**: be-code-kit ahora usa stark-kit como dependencia. Las instalaciones anteriores (be-code-kit independiente) se actualizan automáticamente — el instalador limpia artefactos obsoletos.
 
 ---
 
@@ -138,7 +145,7 @@ bash install.sh /ruta/a/mi/directorio
 
 ## 🔧 Qué hace el instalador (paso a paso)
 
-El instalador ejecuta **8 pasos** en secuencia. Acá te explicamos cada uno para que sepas exactamente qué está pasando en tu máquina:
+El instalador ejecuta **7 pasos** en secuencia (0-6). Acá te explicamos cada uno para que sepas exactamente qué está pasando en tu máquina:
 
 <details>
 <summary><strong>Paso 0 — Verifica requisitos</strong></summary>
@@ -156,34 +163,41 @@ Si falta alguno, el instalador se detiene y te indica cómo instalarlo.
 
 - Valida si el directorio existe y si tiene contenido
 - Si está vacío, lo crea sin preguntar
-- Si ya tiene archivos, te pregunta si quieres continuar en **modo actualización** (solo sobreescribe configs, no toca repos)
+- Si ya tiene archivos, te pregunta si quieres continuar en **modo actualización**
+- En modo actualización, limpia artefactos de versiones anteriores (carpetas genéricas de stark-kit que Bemovil no usa)
 </details>
 
 <details>
-<summary><strong>Paso 2 — Copia archivos de configuración</strong></summary>
+<summary><strong>Paso 2 — Instala stark-kit (base)</strong></summary>
 
-Copia desde `templates/` al directorio destino:
-- `CLAUDE.md` — Configuración principal de la IA, define agentes, routing de skills, convenciones
-- `AGENTS.md` — Definiciones detalladas de cada agente especializado (backend-dev, frontend-dev, etc.)
-- `PROGRESS.md` — Estado del desarrollo, lo usa autoSDD para sobrevivir compactaciones
-- `.gitignore` — Ignora node_modules, .env, builds, etc.
-- `.claude/settings.json` — Hooks y permisos del proyecto
-- `context/guidelines.md` — Convenciones técnicas no negociables
-- `context/business_logic.md` — Lógica de negocio y dominio de Bemovil
-- `context/user_context.md` — Tu perfil de desarrollador (personalizable)
+Descarga y ejecuta el instalador de [stark-kit](https://github.com/thestark77/stark-kit), que a su vez instala autoSDD. Este paso es el núcleo — instala:
+
+- **autoSDD v6.1** — Framework de desarrollo autónomo
+- **Skills compartidas** — prompt-engineering, frontend-design, error-handling, etc.
+- **Plugins** — Engram, code-review, code-simplifier, frontend-design, claude-powerline
+- **Engram MCP** — Memoria persistente entre sesiones (con embeddings semánticos)
+- **Protocolos** — RTK, persona, model-assignments
+- **Templates genéricos** — CLAUDE.md, .claude/settings.json, opencode.json/md
+
+El instalador de autoSDD te pedirá seleccionar al menos **"claude-code"** como agente destino.
+</details>
+
+<details>
+<summary><strong>Paso 3 — Aplica configuración Bemovil</strong></summary>
+
+Sobreescribe los templates genéricos de stark-kit con los específicos de Bemovil:
+- `AGENTS.md` — Agentes especializados (backend-dev, frontend-dev, admin-dev, proxy-dev, etc.)
+- `context/guidelines.md` — Convenciones técnicas de Bemovil
+- `context/business_logic.md` — Lógica de negocio y dominio
 - `context/Bemovil2questions.md` — Preguntas pendientes del proyecto
+- `context/blokayExample.md` — Ejemplo de reportes Blokay
+- `feedback/` — Templates para el sistema de feedback participativo
 </details>
 
 <details>
-<summary><strong>Paso 3 — Crea plantillas de .env vacías</strong></summary>
+<summary><strong>Paso 4 — Clona repositorios + .env</strong></summary>
 
-Crea archivos `.env` con comentarios explicativos pero sin valores sensibles en cada sub-proyecto. Más adelante vas a pegar los valores reales que se comparten por canal interno.
-</details>
-
-<details>
-<summary><strong>Paso 4 — Clona los 4 repositorios</strong></summary>
-
-Clona desde la org IT-Bemovil de GitHub:
+Clona los 4 repos de Bemovil 2.0 y crea plantillas `.env` vacías:
 
 | Repo | URL | Branch |
 |------|-----|--------|
@@ -196,39 +210,16 @@ Clona desde la org IT-Bemovil de GitHub:
 </details>
 
 <details>
-<summary><strong>Paso 5 — Instala autoSDD v5.3</strong></summary>
+<summary><strong>Paso 5 — Instala extras de Bemovil</strong></summary>
 
-Descarga y ejecuta el instalador interactivo de autoSDD. Este paso abre un menú donde debes seleccionar al menos **"claude-code"** como agente destino.
-
-autoSDD instala automáticamente:
-- Skills compartidas (prompt-engineering, error-handling, etc.)
-- Engram MCP (memoria persistente)
-- Protocolos compartidos (RTK, persona, model-assignments)
+Instala herramientas específicas que Bemovil usa y stark-kit no incluye:
+- **E2E Forge** — Tests E2E automatizados con logs reales de Axiom
+- **Caveman** — Comunicación ultra-comprimida (ahorra tokens)
+- **Linear MCP** — Gestión de tareas e issues directamente desde Claude Code
 </details>
 
 <details>
-<summary><strong>Paso 6 — Instala E2E Forge</strong></summary>
-
-Clona el repo de [E2E Forge](https://github.com/thestark77/e2e-forge) y ejecuta su instalador. Queda disponible como skill en Claude Code bajo el comando `/e2e-forge`.
-</details>
-
-<details>
-<summary><strong>Paso 7 — Instala skills y plugins adicionales</strong></summary>
-
-Instala skills que autoSDD no incluye por defecto:
-- Caveman (comunicación ultra-comprimida)
-- Vercel React best practices
-- shadcn component management
-- SDD Agent Team (branch-pr, judgment-day)
-- David Castagneto skills
-
-Y los 5 plugins de Claude Code (powerline, engram, frontend-design, code-review, code-simplifier).
-
-Tambien configura el MCP server de **Linear** para gestion de tareas directamente desde Claude Code.
-</details>
-
-<details>
-<summary><strong>Paso 8 — Inicializa repositorio raíz</strong></summary>
+<summary><strong>Paso 6 — Finaliza configuración</strong></summary>
 
 Inicializa un repo Git en la carpeta raíz (`Bemovil2.0/`) con los archivos de configuración, y crea la carpeta `context/appVersions/v0.1.0/` para el versionado de autoSDD.
 </details>
@@ -415,32 +406,33 @@ Cada sub-proyecto maneja sus propias variables de entorno en un archivo `.env` l
 
 ## 🧰 Lo que queda instalado
 
-### autoSDD v5.3
+### stark-kit (base)
 
-**Framework de desarrollo autónomo** que transforma a Claude Code en un orquestador inteligente que delega trabajo a sub-agentes especializados.
+be-code-kit v2.0 usa [**stark-kit**](https://github.com/thestark77/stark-kit) como base. stark-kit instala todo el stack genérico de desarrollo con IA:
 
-| Aspecto | Detalle |
-|---------|---------|
-| **Repo** | [github.com/thestark77/autosdd](https://github.com/thestark77/autosdd) |
-| **Versión** | 5.3 |
-| **Ubicación** | `~/.claude/skills/autosdd/SKILL.md` |
-| **Activación** | Automática en cada conversación de Claude Code |
-| **Desactivación** | Prefija tu mensaje con `[raw]`, `[no-sdd]`, o `skip autosdd` |
+| Componente | Detalle |
+|------------|---------|
+| **autoSDD v6.1** | Framework de desarrollo autónomo — orquesta sub-agentes de IA |
+| **Skills (16+)** | prompt-engineering, frontend-design, error-handling, e2e-testing, etc. |
+| **Plugins (5)** | Engram, code-review, code-simplifier, frontend-design, claude-powerline |
+| **Engram MCP** | Memoria persistente entre sesiones (con embeddings semánticos) |
+| **OpenCode** | Compatible — instrucciones en opencode.md + opencode.json |
 
 #### Pipeline de autoSDD
 
 ```
-VERSION INIT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → CLOSE → KNOWLEDGE UPDATE
+VERSION INIT → CONTEXT SCOUT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → CLOSE → KNOWLEDGE UPDATE
 ```
 
 1. **VERSION INIT** — Crea `context/appVersions/vX.Y.Z/` y guarda el prompt original
-2. **TRIAGE** — Clasifica la complejidad de la tarea
-3. **ROUTE** — Selecciona el skill apropiado según el contexto
-4. **PLAN (CREA)** — Crea un `prompt.md` estructurado con Contexto, Requisitos, Especificaciones, Acción
-5. **DELEGATE** — Lanza sub-agentes con skill injection (el orquestador **nunca** escribe código directamente)
-6. **COLLECT** — Recoge resultados de los sub-agentes
-7. **CLOSE** — Cierra la versión con changelog
-8. **KNOWLEDGE UPDATE** — Actualiza Engram con lo aprendido
+2. **CONTEXT SCOUT** — Haiku pre-filtra el contexto relevante
+3. **TRIAGE** — Clasifica la complejidad de la tarea
+4. **ROUTE** — Selecciona el skill apropiado según el contexto
+5. **PLAN (CREA)** — Crea un `prompt.md` estructurado con Contexto, Requisitos, Especificaciones, Acción
+6. **DELEGATE** — Lanza sub-agentes con skill injection (el orquestador **nunca** escribe código directamente)
+7. **COLLECT** — Recoge resultados de los sub-agentes
+8. **CLOSE** — Cierra la versión con changelog
+9. **KNOWLEDGE UPDATE** — Actualiza Engram con lo aprendido
 
 #### Regla fundamental
 
@@ -479,6 +471,8 @@ VERSION INIT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → C
 
 ### Skills instaladas (16+)
 
+**Instaladas por stark-kit** (autoSDD + core skills):
+
 | Skill | Fuente | Propósito |
 |-------|--------|-----------|
 | `prompt-engineering-patterns` | [wshobson/agents](https://github.com/wshobson/agents) | Patrones avanzados de prompting para LLMs |
@@ -490,15 +484,19 @@ VERSION INIT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE → COLLECT → C
 | `claude-md-improver` | [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) | Auditoría y mejora de archivos CLAUDE.md |
 | `branch-pr` | [gentleman-programming/sdd-agent-team](https://github.com/gentleman-programming/sdd-agent-team) | Workflow de creación de PRs |
 | `judgment-day` | [gentleman-programming/sdd-agent-team](https://github.com/gentleman-programming/sdd-agent-team) | Code review adversarial paralelo |
-| `caveman` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Comunicación ultra-comprimida (ahorra tokens) |
-| `caveman-review` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Code review comprimido |
-| `compress` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Compresión de archivos de memoria |
-| `vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | Patrones de React/Next.js de Vercel |
 | `postgresql-table-design` | [wshobson/agents](https://github.com/wshobson/agents) | Diseño de esquemas PostgreSQL |
-| `shadcn` | [shadcn-ui/ui](https://github.com/shadcn-ui/ui) | Gestión de componentes shadcn |
 | `skill-creator` | autoSDD | Creación de nuevas skills |
 | `knowledge-graph` | autoSDD | Grafos de conocimiento visuales |
 | `feedback-report` | autoSDD | Reportes de feedback y calidad |
+
+**Instaladas por be-code-kit** (extras para Bemovil):
+
+| Skill | Fuente | Propósito |
+|-------|--------|-----------|
+| `caveman` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Comunicación ultra-comprimida (ahorra tokens) |
+| `caveman-review` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Code review comprimido |
+| `compress` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Compresión de archivos de memoria |
+| `e2e-forge` | [thestark77/e2e-forge](https://github.com/thestark77/e2e-forge) | Tests E2E automatizados con Axiom |
 
 ---
 
@@ -808,7 +806,7 @@ be-code-kit también funciona con [OpenCode](https://opencode.ai), el agente de 
 
 OpenCode lee `opencode.md` (instrucciones del pipeline autoSDD adaptadas) y `opencode.json` (asignación de modelos). No necesita hooks — las reglas se inyectan en el system prompt.
 
-Nota: Engram MCP no está disponible en OpenCode. autoSDD usa caché de conocimiento basado en archivos en `context/appVersions/knowledge/`.
+El instalador configura Engram MCP globalmente para OpenCode usando el mismo wrapper de embeddings que Claude Code, habilitando memoria persistente y búsqueda semántica cross-language.
 
 ---
 
@@ -853,21 +851,6 @@ playwright test --headed                 # Correr tests de browser
 
 ---
 
-## 🖥 Cómo usar OpenCode con este setup
-
-be-code-kit también funciona con [OpenCode](https://opencode.ai), el agente de IA de código abierto. La configuración es automática:
-
-1. Instalá OpenCode: seguís las instrucciones en [opencode.ai](https://opencode.ai)
-2. Navegá a tu proyecto: `cd Bemovil2.0`
-3. Ejecutá: `opencode`
-4. Seleccioná un modelo y empezá a chatear
-
-OpenCode lee `opencode.md` (instrucciones del pipeline autoSDD adaptadas) y `opencode.json` (asignación de modelos). No necesita hooks — las reglas se inyectan en el system prompt.
-
-Nota: Engram MCP no está disponible en OpenCode. autoSDD usa caché de conocimiento basado en archivos en `context/appVersions/knowledge/`.
-
----
-
 ## 🔥 Troubleshooting
 
 <details>
@@ -891,9 +874,9 @@ git clone https://github.com/IT-Bemovil/bemovil2.0-backend.git backend
 
 **Solución**:
 1. Verifica que existe `~/.claude/skills/autosdd/SKILL.md`
-2. Si no existe, reinstala:
+2. Si no existe, reinstala via stark-kit:
    ```bash
-   bash <(curl -fsSL https://raw.githubusercontent.com/thestark77/autosdd/main/install.sh)
+   git clone https://github.com/thestark77/stark-kit.git /tmp/stark-kit && bash /tmp/stark-kit/install.sh
    ```
 3. Reinicia Claude Code
 </details>
@@ -957,9 +940,9 @@ playwright install chromium
 
 | Proyecto | Repo | Descripción |
 |----------|------|-------------|
+| **stark-kit** | [github.com/thestark77/stark-kit](https://github.com/thestark77/stark-kit) | Base genérica — autoSDD + skills + plugins (dependencia de be-code-kit) |
 | **autoSDD** | [github.com/thestark77/autosdd](https://github.com/thestark77/autosdd) | Framework de desarrollo autónomo para agentes de IA |
 | **E2E Forge** | [github.com/thestark77/e2e-forge](https://github.com/thestark77/e2e-forge) | Tests E2E automatizados con Axiom |
-| **stark-kit** | [github.com/thestark77/stark-kit](https://github.com/thestark77/stark-kit) | Versión genérica del kit (sin contexto Bemovil) |
 
 ---
 
