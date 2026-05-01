@@ -18,7 +18,7 @@ Before processing any user message:
    - **INLINE**: coordination, git ops, 1-file edits, reads 1-3 files
    - **DELEGATE**: 2+ files, 4+ reads, tests/builds, multi-step execution
    - **ALWAYS DELEGATE**: 2+ independent parallel tasks (use Task tool with subagent_type="general")
-   - **Event-driven ONLY**: Never sleep/poll. Use Bash for builds, Task tool for parallel work
+   - **Event-driven ONLY**: NEVER use sleep, setInterval, polling loops, or any form of waiting. When a build or long process is running, use Bash and check results. When you need parallel work, use Task tool with subagent_type="general". NEVER block the conversation waiting for something.
 
 ### After Every Task Tool Returns (replaces SubagentStop hook)
 
@@ -88,8 +88,17 @@ ALL prompts go through autoSDD unless `[raw]`, `[no-sdd]`, or `skip autosdd`.
 When using Task tool, prefer:
 - **explore** subagent: For code exploration and quick searches
 - **general** subagent: For implementation, multi-step tasks
+- **NO polling/sleep**: OpenCode has no "Monitor" or "Background Agent" tool. NEVER use sleep loops, setInterval, or polling. Use Bash for commands and Task tool for parallel sub-agents.
 
-The orchestrator (main session) coordinates and delegates.
+---
+
+## What OpenCode Doesn't Have
+
+OpenCode has **no** Monitor tool, Background Agent, or any polling/sleep mechanism. This means:
+- **NEVER** use `sleep`, `setInterval`, or polling loops to wait for builds or processes
+- Use **Bash** tool to run commands — check the exit code and output directly
+- Use **Task tool** with `subagent_type="general"` for parallel work — fire and monitor results
+- There is no way to "wait in the background" — all work is synchronous and event-driven
 
 ---
 

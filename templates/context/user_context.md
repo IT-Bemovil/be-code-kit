@@ -23,7 +23,7 @@
 - **Backend**: Node.js, Express 5, TypeScript, Sequelize ORM, MySQL, Redis
 - **Frontend**: Vue.js 3, Vite, Vuex, Vue Router, Tailwind CSS
 - **Infrastructure**: AWS (S3, EC2), GitHub Actions CI/CD
-- **AI/Dev Tools**: Claude Code, autoSDD v5.3, Engram memory
+- **AI/Dev Tools**: Claude Code or OpenCode, autoSDD v5.3, Engram memory (Claude Code only — use file-based caching in OpenCode)
 - [COMPLETAR — agrega o quita según tu experiencia real]
 
 ## Team & Organization
@@ -81,7 +81,7 @@
 - NEVER add "Co-Authored-By" or AI attribution to commits — conventional commits only
 - NEVER build after changes
 - Use bat/rg/fd/sd/eza — NEVER cat/grep/find/sed/ls
-- Always prefix commands with `rtk` for token optimization
+- When using Claude Code CLI, always prefix commands with `rtk` for token optimization. When using OpenCode, `rtk` is not available — use regular commands directly
 - TypeScript strict, `interface` over `type`, no `any`
 - Zod validation on EVERY endpoint with error codes (not text)
 - Code in English, UI in Spanish (neutral Colombian)

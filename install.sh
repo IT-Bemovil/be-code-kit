@@ -145,6 +145,38 @@ for f in opencode.json opencode.md; do
   fi
 done
 
+# ── Detect available AI agents ──────────────────────────────────
+echo ""
+print_step "" "Detectando agente de IA..."
+HAS_CLAUDE=false
+HAS_OPENCODE=false
+
+if command -v claude &>/dev/null; then
+  HAS_CLAUDE=true
+  print_ok "Claude Code CLI detectado"
+else
+  print_info "Claude Code CLI no encontrado"
+fi
+
+if command -v opencode &>/dev/null; then
+  HAS_OPENCODE=true
+  print_ok "OpenCode CLI detectado"
+else
+  print_info "OpenCode CLI no encontrado (instalar desde opencode.ai)"
+fi
+
+if $HAS_CLAUDE && $HAS_OPENCODE; then
+  print_ok "Ambos agentes detectados — configuraciones instaladas para ambos (sin conflictos)"
+elif $HAS_CLAUDE; then
+  print_ok "Usando Claude Code CLI — hooks en .claude/settings.json activos"
+elif $HAS_OPENCODE; then
+  print_ok "Usando OpenCode — instrucciones en opencode.md activas (no necesita hooks)"
+else
+  print_warn "Ningún agente de IA detectado. Instalá Claude Code CLI u OpenCode."
+  print_info "  Claude Code: npm install -g @anthropic-ai/claude-code"
+  print_info "  OpenCode:    ver https://opencode.ai"
+fi
+
 # Copy context files
 for f in guidelines.md business_logic.md user_context.md Bemovil2questions.md blokayExample.md; do
   if [ -f "$SCRIPT_DIR/templates/context/$f" ]; then
@@ -399,8 +431,9 @@ echo -e "  ${BOLD}Próximos pasos:${NC}"
 echo -e "    1. Pega tus variables de entorno (.env) en cada sub-proyecto"
 echo -e "       → Pide las credenciales de sandbox a tu equipo"
 echo -e "    2. Instala dependencias en cada proyecto: cd backend && $PKG_MGR install"
-echo -e "    3. Abrí Claude Code: cd $TARGET_DIR && claude"
-echo -e "       O OpenCode: cd $TARGET_DIR && opencode"
+echo -e "    3. Abrí tu agente de IA:"
+echo -e "       Claude Code: cd $TARGET_DIR && claude"
+echo -e "       OpenCode:    cd $TARGET_DIR && opencode"
 echo -e "    4. Configura Axiom: pega el AXIOM_QUERY_TOKEN en backend/.env"
 echo ""
 echo -e "  ${BOLD}Lee el README.md para el tutorial completo.${NC}"
