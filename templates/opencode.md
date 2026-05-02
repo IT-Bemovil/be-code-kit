@@ -93,6 +93,26 @@ OpenCode has 5 built-in agents. Model assignments are configured in `opencode.js
 - **title** (session titles): Cheapest model, generates session titles
 - **compaction** (context compaction): Saves conversation state before compaction
 
+When using Task tool, prefer:
+- **explore** subagent: For code exploration and quick searches
+- **general** subagent: For implementation, multi-step tasks
+
+### autoSDD Role → OpenCode Agent Mapping
+
+Resolve the model from `context/models.json` active preset. OpenCode maps roles to agent types:
+
+| autoSDD Role | subagent_type | Model tier |
+|---|---|---|
+| context-scout | explore | cheapest (haiku-tier) |
+| version-close | explore | cheapest (haiku-tier) |
+| knowledge-update | explore | cheapest (haiku-tier) |
+| precompact-save | (compaction agent) | cheapest (haiku-tier) |
+| prompt-analyst | explore | cheapest (haiku-tier) |
+| sdd-apply, sdd-verify, sdd-* | general | default (sonnet-tier) |
+| feedback-report, knowledge-graph | general | default (sonnet-tier) |
+
+Utility/mechanical tasks use `explore` (cheaper model). Implementation tasks use `general`.
+
 ---
 
 ## What OpenCode Doesn't Have
