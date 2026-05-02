@@ -436,7 +436,7 @@ VERSION INIT → CONTEXT SCOUT → TRIAGE → ROUTE → PLAN (CREA) → DELEGATE
 
 #### Regla fundamental
 
-> **El orquestador DELEGA. Nunca escribe código fuente directamente.** Si ves que Claude escribe más de 2 archivos inline, algo está mal.
+> **El orquestador DELEGA.** Las reglas de delegación están definidas en `sdd-orchestrator.md` — autoSDD no las duplica. Si ves que Claude escribe más de 2 archivos inline, algo está mal.
 
 ---
 
