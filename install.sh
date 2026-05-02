@@ -12,7 +12,17 @@ set -uo pipefail
 _becode_install() {
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TARGET_DIR="${1:-$(dirname "$SCRIPT_DIR")/Bemovil2.0}"
+
+# Parse arguments
+AUTO_YES=false
+TARGET_DIR=""
+for arg in "$@"; do
+  case "$arg" in
+    --yes|-y) AUTO_YES=true ;;
+    *) TARGET_DIR="$arg" ;;
+  esac
+done
+TARGET_DIR="${TARGET_DIR:-$(dirname "$SCRIPT_DIR")/Bemovil2.0}"
 
 # Colors
 RED='\033[0;31m'
@@ -94,8 +104,12 @@ if [ -d "$TARGET_DIR" ]; then
     print_warn "NO se tocarán repos existentes (backend/, frontend/, admin/, bemovil2-proxy/)."
     echo ""
 
-    if [[ -r /dev/tty ]]; then
-      read -rp "  ¿Continuar con la actualización? [y/N]: " confirm </dev/tty || confirm=""
+    if [ "$AUTO_YES" = true ]; then
+      confirm="y"
+    elif [ -t 0 ]; then
+      read -rp "  ¿Continuar con la actualización? [y/N]: " confirm || confirm=""
+    elif [[ -r /dev/tty ]] 2>/dev/null; then
+      read -rp "  ¿Continuar con la actualización? [y/N]: " confirm </dev/tty 2>/dev/null || confirm="y"
     else
       confirm="y"
     fi
@@ -129,13 +143,8 @@ print_info "stark-kit instala: autoSDD, skills de desarrollo, plugins, Engram MC
 print_info "El instalador de autoSDD te pedirá seleccionar agentes (al menos claude-code)."
 echo ""
 
-if [[ -r /dev/tty ]]; then
-  bash <(curl -fsSL https://raw.githubusercontent.com/thestark77/stark-kit/main/install.sh) "$TARGET_DIR" --yes </dev/tty
-  starkkit_status=$?
-else
-  curl -fsSL https://raw.githubusercontent.com/thestark77/stark-kit/main/install.sh | bash -s -- "$TARGET_DIR" --yes
-  starkkit_status=$?
-fi
+curl -fsSL https://raw.githubusercontent.com/thestark77/stark-kit/main/install.sh | bash -s -- "$TARGET_DIR" --yes
+starkkit_status=$?
 
 if [ $starkkit_status -eq 0 ]; then
   print_ok "stark-kit instalado exitosamente"
@@ -174,6 +183,14 @@ if [ -f "$SCRIPT_DIR/templates/.claude/settings.json" ]; then
   cp "$SCRIPT_DIR/templates/.claude/settings.json" "$TARGET_DIR/.claude/settings.json"
   print_ok ".claude/settings.json (Bemovil hooks) aplicado"
 fi
+
+# Override opencode config with Bemovil-specific versions
+for f in opencode.json opencode.md; do
+  if [ -f "$SCRIPT_DIR/templates/$f" ]; then
+    cp "$SCRIPT_DIR/templates/$f" "$TARGET_DIR/$f"
+    print_ok "$f (Bemovil) aplicado"
+  fi
+done
 
 # Copy Bemovil context files (overrides stark-kit generics + adds Bemovil-specific)
 for f in guidelines.md business_logic.md user_context.md Bemovil2questions.md blokayExample.md; do

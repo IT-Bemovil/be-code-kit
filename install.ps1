@@ -9,9 +9,11 @@
 # TARGET_DIR defaults to current script directory's parent + "Bemovil2.0"
 
 param(
-  [string]$TargetDir
+  [string]$TargetDir,
+  [switch]$Yes
 )
 
+$AutoYes = $Yes.IsPresent
 $ErrorActionPreference = "Continue"
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -123,7 +125,11 @@ if (Test-Path $TargetDir) {
     Print-Warn "NO se tocarán repos existentes (backend/, frontend/, admin/, bemovil2-proxy/)."
     Write-Host ""
 
-    $confirm = Read-Host "  ¿Continuar con la actualización? [y/N]"
+    if ($AutoYes) {
+      $confirm = "y"
+    } else {
+      $confirm = Read-Host "  ¿Continuar con la actualización? [y/N]"
+    }
     if ($confirm -notmatch '^[Yy]$') {
       Write-Host "  Instalación cancelada."
       exit 0
@@ -224,6 +230,15 @@ $settingsSrc = Join-Path $ScriptDir "templates/.claude/settings.json"
 if (Test-Path $settingsSrc) {
   Copy-Item -Path $settingsSrc -Destination (Join-Path $claudeDir "settings.json") -Force
   Print-Ok ".claude/settings.json (Bemovil hooks) aplicado"
+}
+
+# Override opencode config with Bemovil-specific versions
+foreach ($f in @("opencode.json", "opencode.md")) {
+  $src = Join-Path $ScriptDir "templates/$f"
+  if (Test-Path $src) {
+    Copy-Item -Path $src -Destination (Join-Path $TargetDir $f) -Force
+    Print-Ok "$f (Bemovil) aplicado"
+  }
 }
 
 # Copy Bemovil context files (overrides + Bemovil-specific)
